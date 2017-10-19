@@ -75,6 +75,7 @@ Show tables, plots, etc. and describe them.
 
 ```{r}
 summary(d)
+summary(sp)
 ```
 
 
