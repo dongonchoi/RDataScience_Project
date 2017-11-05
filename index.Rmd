@@ -39,6 +39,10 @@ library(spocc)
 # Results
 
 Show tables, plots, etc. and describe them.
+```{r}
+summary(d)
+```
+
 
 # Conclusions
 
