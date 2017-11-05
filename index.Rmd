@@ -15,19 +15,6 @@ To simulate influenza outbreaks, first we need US census data for age distributi
 read.csv('data/demographic.csv')
 ```
 
-
-You can do bullets like this:
-
-* The first most important thing
-* The second most important thing
-* The third most important thing
-
-You can do numbers like this:
-
-1. The first most important thing
-2. The second most important thing
-3. The third most important thing
-
 Load any required packages in a code chunk (you may need to install some packages):
 
 ```{r, message=F, warning=F}
@@ -38,14 +25,6 @@ library(spocc)
 
 # Results
 
-Show tables, plots, etc. and describe them.
-```{r}
-summary(d)
-```
-
-
 # Conclusions
-
-What have you learned?  Are there any broader implications?
 
 # References
