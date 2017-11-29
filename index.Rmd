@@ -1,5 +1,5 @@
 ---
-title: "Visualize Noise pollution in New York City"
+title: "Visualize Noise pollution in New York Ci111ty"
 subtitle: "Using NYC311 Service Requests Dataset"
 author: Choi Dongon
 ---

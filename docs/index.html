@@ -12,7 +12,7 @@
 <meta name="author" content="Choi Dongon" />
 
 
-<title>Investigate a difference in pattern of Influenza Outbreak between different regions</title>
+<title>Visualize Noise pollution in New York Ci111ty</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -296,7 +296,8 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Investigate a difference in pattern of Influenza Outbreak between different regions</h1>
+<h1 class="title toc-ignore">Visualize Noise pollution in New York Ci111ty</h1>
+<h3 class="subtitle"><em>Using NYC311 Service Requests Dataset</em></h3>
 <h4 class="author"><em>Choi Dongon</em></h4>
 
 </div>
@@ -305,24 +306,25 @@ div.tocify {
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
 <p>Contact networks between individuals play a significant role in influenza transmission. However, hitherto, many strategies to control influenza transmission have been designed without a consideration for a difference in contact networks by different regions. The pattern of contact networks in each region is changed by age distributions, economic activities, social status and et al, and thus yielding a different influenza outcome by regions. To investigate these issues, the main objectives of this project are two-fold: 1) to simulate influenza outbreaks at different contact network patterns by regions, and 2) to assess a difference in the outcomes of influenza pandemics between regions.</p>
+<p>Recently, noise pollution is the one of problems in urbanized area, especially in metropolitan area such as New York City, Cichago, and Los Angelos. Noise pollution significantly interventm, ultimatlely can cause 떨어뜨리다 their healthy life.</p>
+<p>In this project, I will investigate noise pollution in NYC by visualizing and analying spatio-temproal perspective.</p>
 </div>
 <div id="materials-and-methods" class="section level1">
 <h1>Materials and methods</h1>
-<p>To simulate influenza outbreaks, first we need US census data for age distribution, economic activities on Buffalo city, NY.</p>
-<pre class="r"><code>## load demographic data for Buffalo city
-read.csv(&#39;data/demographic.csv&#39;)</code></pre>
-<pre><code>##                Geography Total.population Under.5.years X5.to.9.years
-## 1 Buffalo city, New York           259517         17169         15899
-##   X10.to.14.years X15.to.19.years X20.to.24.years X25.to.34.years
-## 1           16113           19306           25267           42799
-##   X35.to.44.years X45.to.54.years X55.to.59.years X60.to.64.years
-## 1           29570           31837           17746           13107
-##   X65.to.74.years X75.to.84.years X85.years.and.over
-## 1           16088           10468               4148</code></pre>
-<p>Load any required packages in a code chunk (you may need to install some packages):</p>
-<pre class="r"><code>library(ggplot2)
-library(maps)
-library(spocc)</code></pre>
+<p>Load required packages</p>
+<pre class="r"><code>## Load any required packages in a code chunk; you may need to install some packages below using a code &#39;install.packages(&#39;PACKAGE NAME&#39;)
+library(dplyr)
+library(tidyr)
+library(ggmap)
+library(ggplot2)
+library(openair)
+library(zipcode)</code></pre>
+<p>Import dataset &amp; Data cleaning</p>
+<pre class="r"><code>## Load NYC 311 noise complaints data
+#noisedata&lt;-read.csv(&#39;data/311.csv&#39;)
+
+## Filter NYC 311 dataRemove missing data
+#noise &lt;- filter(noise, !is.na(Latitude) | !is.na(Longitude))</code></pre>
 </div>
 <div id="results" class="section level1">
 <h1>Results</h1>
