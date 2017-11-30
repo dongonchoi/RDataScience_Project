@@ -19,6 +19,8 @@ NYC311 provides 24/7 support to New Yorkers by providing a one-stop shop for a m
 
 The data set used in this project contains 311 Service Requests in 2016. Each observation contains 53 variables describing the service request, such as complaint type, date received, incident address, and resolution description. To reduce computational overhead, only five columns were used for this analysis.
 
+## Data preparation
+
 Load required packages
 ```{r, message=F, warning=F}
 ## Load any required packages
@@ -84,7 +86,9 @@ caldata$date <- as.POSIXct(caldata$date, "%m/%d/%Y", tz = "GMT")
 ```
 
 # Results
+
 ## Noise pollution by Borough
+
 ## Noise pollution by Type
 
 Visualize noise pollution: Space, Time
