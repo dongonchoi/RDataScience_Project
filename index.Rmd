@@ -7,7 +7,7 @@ author: "By Choi Dongon"
 
 <img src="https://md-assets-east.azureedge.net/website-media-cache/1/d/c/7/e/b/1dc7eb19facf651baa3b7c5052f3d18103bde33c.jpg" alt="alt text" width="800">
 
-<small><small><small>source - https://www.marceldigital.com/blog/2015/08/what-is-content-noise</small></small></small>
+<small><small>source - https://www.marceldigital.com/blog/2015/08/what-is-content-noise</small></small>
 
 Noise pollution is the one of serious problems especially wherein metropolitan area such as New York City. Noise has a negative impact on dwellers' health or well-being lives, and also the growing body of scientific evidence is showing direct health effect (Dominici, 2013, and WHO, 2011). Thus, noise no longer needs to be considered just as an annoyance, but as one of serious problems we have been going through. In this project, I will investigate noise pollution problems in New York City by visualizing and analyzing NYC Open Data's dataset on 311 Service Requests to have a better understanding with spatio-temporal perspective.
 
@@ -129,11 +129,6 @@ calendarPlot(caldata, pollutant = "count", year = 2016, main = "Noise Complaints
 
 # Conclusions
 
-Given a two-week timeframe for completion of this project, the scope of the analysis was limited. If given more time, it would be interesting to conduct the following research:
-
-1. Do a further work on spatial quiry finding peaceful and quiet areas within each Borough in New York City.
-
-2. Include the detailed complaint description from the original data set to understand the root causes of noise complaints. Such an analysis will require the use of natural language processing to process the large volume of texts.
 
 
 # References
