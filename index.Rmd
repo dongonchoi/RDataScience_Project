@@ -1,12 +1,11 @@
 ---
-title: "Noise pollution in New York City"
+title: "Visualize Noise pollution in New York City"
 author: "By Choi Dongon"
-subtitle: Using NYC311 Service Requests Dataset
 ---
 
 # Introduction
 
-<img src="https://md-assets-east.azureedge.net/website-media-cache/1/d/c/7/e/b/1dc7eb19facf651baa3b7c5052f3d18103bde33c.jpg" alt="alt text" width="400">
+<img src="https://md-assets-east.azureedge.net/website-media-cache/1/d/c/7/e/b/1dc7eb19facf651baa3b7c5052f3d18103bde33c.jpg" alt="alt text" width="800">
 
 <small><small><small>source - https://www.marceldigital.com/blog/2015/08/what-is-content-noise</small></small></small>
 
@@ -30,8 +29,6 @@ library(ggmap)
 library(openair)
 library(scales)
 library(knitr)
-library(DT)
-library(htmlwidgets)
 ```
 
 ## Data preparation
@@ -133,6 +130,7 @@ Given a two-week timeframe for completion of this project, the scope of the anal
 1. Do a further work on spatial quiry finding peaceful and quiet areas within each Borough in New York City.
 
 2. Include the detailed complaint description from the original data set to understand the root causes of noise complaints. Such an analysis will require the use of natural language processing to process the large volume of texts.
+
 
 # References
 [1] WHO, 2011, Burden of Disease from Environmental Noise.
