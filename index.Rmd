@@ -215,12 +215,11 @@ calendarPlot(caldata, pollutant = "count", year = 2016, main = "Noise pollution 
 Noise pollutionsummary the results. further questions. (upcoming)
 
 # References
-[1] WHO, 2011, Burden of Disease from Environmental Noise.
 
-[2] Dominici, 2013, Residential exposure to aircraft noise and hospital admissions for cardiovascular diseases: multi-airport retrospective study, British Medical Journal.
+[1] Dominici, 2013, Residential exposure to aircraft noise and hospital admissions for cardiovascular diseases: multi-airport retrospective study, British Medical Journal.
 
-[3] NYC Open Data - https://opendata.cityofnewyork.us/
+[2] NYC Open Data - https://opendata.cityofnewyork.us/
 
-[4] NYC Data Science Academy Blog - https://nycdatascience.com/blog/
+[3] NYC Data Science Academy Blog - https://nycdatascience.com/blog/
 
-[5] https://mapstyle.withgoogle.com/
+[4] WHO, 2011, Burden of Disease from Environmental Noise.
