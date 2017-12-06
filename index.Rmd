@@ -172,7 +172,6 @@ The following maps are showing where noise pollution occurs and a spatial patter
 ## Map noise pollution by borough
 #grid.arrange(mp1, mp2, mp3, mp4, mp5, ncol = 2)
 ```
-
 ```{r, Map noise pollution 2, warning=F, message=F, echo=F}
 grid.arrange(mp1, mp2, ncol = 2)
 grid.arrange(mp3, mp4, ncol = 2)
