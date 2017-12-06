@@ -173,14 +173,15 @@ The following maps are showing where noise pollution occurs and a spatial patter
 #grid.arrange(mp1, mp2, mp3, mp4, mp5, ncol = 2)
 ```
 
-```{r, Map noise pollution, warning=F, message=F, echo=F}
+```{r, Map noise pollution 2, warning=F, message=F, echo=F}
 grid.arrange(mp1, mp2, ncol = 2)
 grid.arrange(mp3, mp4, ncol = 2)
 grid.arrange(mp5, ncol = 2)
 ```
-## WHAT: Noise pollution by Type
 
+## WHAT: Noise pollution by Type
 Below plot is illustrating distribution of noise pollution by type. We can find the source of noise pollution in New York City.
+
 ```{r, warning=F, message=F}
 ## Plot distribution of noise pollution by type
 ggplot(bynoisetype, aes(x=reorder(Complaint.Type, count), y=count, fill=Complaint.Type))+ 
