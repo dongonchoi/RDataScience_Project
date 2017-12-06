@@ -1,5 +1,5 @@
 ---
-title: "Visualize Noise pollution in New York City"
+title: "Visualizing Noise pollution in New York City"
 subtitle: "Where, What, and When?"
 author: "By Choi Dongon"
 ---
@@ -21,9 +21,9 @@ NYC311 provides 24/7 support to New Yorkers by providing a one-stop shop for a m
 
 The data set used in this project contains NYC311 Service Requests in 2016. Each observation contains 53 variables describing the service request, such as complaint type, date received, incident address, and resolution description. To reduce computational overhead, only five columns were used for this analysis. I will approach and analyze the data to answer the following three basic questions.
 
-- WHERE: Where have gone through noise pollution?
-- WHAT: What could be contributable to noise pollution?
-- WHEN: When people in NYC have gone through noise pollution?
+- **WHERE:** Where have gone through noise pollution?
+- **WHAT:** What could be contributable to noise pollution?
+- **WHEN:** When people in NYC have gone through noise pollution?
 
 To answer these questions, several tasks need to be done from a basic data handing to setting up for visualization. 
 
@@ -58,7 +58,7 @@ noise <- filter(noise, !is.na(Latitude) | !is.na(Longitude)) %>%
 Let's look at data sample.
 ```{r, Show data sample, message=F, warning=F}
 ## Data Sample
-datatable(head(noise), options = list(searching = F, pageLength = 3))
+datatable(head(noise), options = list(searching = F, pageLength = 6))
 ```
 
 We need to convert values on date and information on location(Latitude and Longitude)
@@ -73,13 +73,14 @@ noise <- mutate(noise, lat = signif(noise$Latitude, 5), lon = signif(noise$Longi
 
 The following tasks need to be done for mapping noise pollution by borough. This part includes downloading base maps of each borough, dividing raw data by borough.
 ```{r, Downlad map, message=F, warning=T}
-## Download New York City map by borough from Google Map
+## Set Longitude and Latitude of each borough to aviod OVER_QURY_LIMIT error when use 'get_googlemap' function
 Manhattan <- c("lon" = -73.97125, "lat" = 40.78306)
 Bronx <- c("lon" = -73.86483, "lat" = 40.84478)
 Brooklyn <- c("lon" = -73.94416, "lat" = 40.67818)
 Queens <- c("lon" = -73.79485,"lat" = 40.72822)
 StatenIsland <- c("lon" = -74.1502,"lat" = 40.57953)
 
+## Download New York City map by borough from Google Map
 manhMap <- get_googlemap(Manhattan, maptype = 'roadmap', style = mapstyle, zoom = 12)
 bronMap <- get_googlemap(Bronx, maptype = 'roadmap', style = mapstyle, zoom = 12)
 brooMap <- get_googlemap(Brooklyn, maptype = 'roadmap', style = mapstyle, zoom = 12)
@@ -109,7 +110,7 @@ instat <- group_by(select(noise, -Created.Date), Borough, year) %>%
   group_by(year)
 ```
 
-Noise pollution is visualized by using 2D kernel density estimation provided from ggplot2 package. Each created ggmap for noise pollution by borough is stored in order to display properly in Result section. 
+Noise pollution is visualized by using 'stat_density2d' function provided from ggplot2 package. This 'stat_density2d' function is to do 2D kernel density estimation. Each created ggmap for noise pollution by borough is stored in order to display properly in Result section. 
 ```{r, Set up ggmap, message=F, warning=F}
 ## Set up ggmap to map distribution of noise by borough
 mp1 <- ggmap(manhMap) +
@@ -168,11 +169,11 @@ caldata$date <- as.POSIXct(caldata$date, "%m/%d/%Y", tz = "EST")
 ## WHERE: Noise pollution by Borough
 The following maps are showing where noise pollution occurs and a spatial pattern of noise pollution within each borough.
 
-```{r, Map noise pollution, warning=F, message=F}
+```{r, Map noise pollution, warning=F, message=F, eval=F, results='hide'}
 ## Map noise pollution by borough
-#grid.arrange(mp1, mp2, mp3, mp4, mp5, ncol = 2)
+grid.arrange(mp1, mp2, mp3, mp4, mp5, ncol = 2)
 ```
-```{r, Map noise pollution 2, warning=F, message=F, echo=F}
+```{r, Map noise pollution 2, warning=F, message=F, echo=F, fig.width = 9, fig.height= 6}
 grid.arrange(mp1, mp2, ncol = 2)
 grid.arrange(mp3, mp4, ncol = 2)
 grid.arrange(mp5, ncol = 2)
@@ -181,7 +182,7 @@ grid.arrange(mp5, ncol = 2)
 ## WHAT: Noise pollution by Type
 Below plot is illustrating distribution of noise pollution by type. We can find the source of noise pollution in New York City.
 
-```{r, warning=F, message=F}
+```{r, Plot noise type, warning=F, message=F, fig.width= 9}
 ## Plot distribution of noise pollution by type
 ggplot(bynoisetype, aes(x=reorder(Complaint.Type, count), y=count, fill=Complaint.Type))+ 
   geom_bar(stat = 'identity') +
@@ -194,16 +195,16 @@ ggplot(bynoisetype, aes(x=reorder(Complaint.Type, count), y=count, fill=Complain
 ```
 
 ## WHEN: Noise pollution by Date
-The following calander map illustrates noise pollution by day in 2016.
+The following calender map illustrates noise pollution by day in 2016. It is easy to make a calendar map with 'calenderPlot' function.
 
-```{r, message=F, warning=F}
-## Plot a calendar heatmap on Noise pollution by date
+```{r, Calander heat map, message=F, warning=F, fig.width= 9}
+## Plot a calendar heat map on Noise pollution by date
 calendarPlot(caldata, pollutant = "count", year = 2016, main = "Noise pollution by Date in 2016", cols=c('yellow','orange','red'))
 ```
 
 # Conclusions
 
-In this project, we investigated noise pollution in New York City. For Manhattan and Queens, noise pollution affects almost the whole area of these two boroughs. On the other hand, for Brookyn, Bronx, and Staten Island, noise pollution is located at some areas of these boroughs. Most attributable factors to noise pollution in New York City are coming from residential noise (about 53%). When we looked at calander heat map, noise pollution primarily occurs on weekend. Perhaps, it is because many people have a party and invite friends their house during the weekend.
+In this project, noise pollution in New York City is investigated based on three basic questions - Where, What and When. For Manhattan and Queens, noise pollution affects almost the whole area of these two boroughs. On the other hand, for Brookyn, Bronx, and Staten Island, noise pollution is located at some areas of these boroughs. Most attributable factors to noise pollution in New York City are coming from residential noise (about 53%). When we looked at calander heat map, noise pollution primarily occurs on weekend. Perhaps, it is because many people have a party and invite friends their house during the weekend.
 
 If possible, it would be interesting conduct the following research:
 - Examine noise pollution at hourly scale

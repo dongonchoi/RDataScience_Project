@@ -12,7 +12,7 @@
 <meta name="author" content="By Choi Dongon" />
 
 
-<title>Visualize Noise pollution in New York City</title>
+<title>Visualizing Noise pollution in New York City</title>
 
 <script src="site_libs/jquery-1.12.4/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -301,7 +301,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Visualize Noise pollution in New York City</h1>
+<h1 class="title toc-ignore">Visualizing Noise pollution in New York City</h1>
 <h3 class="subtitle"><em>Where, What, and When?</em></h3>
 <h4 class="author"><em>By Choi Dongon</em></h4>
 
@@ -321,9 +321,9 @@ div.tocify {
 <p>NYC311 provides 24/7 support to New Yorkers by providing a one-stop shop for a multitude of general needs. Within the proximity of the New York Metropolitan Area, callers can dial 311 to request for a variety of governmental services, such as filing a noise complaint.</p>
 <p>The data set used in this project contains NYC311 Service Requests in 2016. Each observation contains 53 variables describing the service request, such as complaint type, date received, incident address, and resolution description. To reduce computational overhead, only five columns were used for this analysis. I will approach and analyze the data to answer the following three basic questions.</p>
 <ul>
-<li>WHERE: Where have gone through noise pollution?</li>
-<li>WHAT: What could be contributable to noise pollution?</li>
-<li>WHEN: When people in NYC have gone through noise pollution?</li>
+<li><strong>WHERE:</strong> Where have gone through noise pollution?</li>
+<li><strong>WHAT:</strong> What could be contributable to noise pollution?</li>
+<li><strong>WHEN:</strong> When people in NYC have gone through noise pollution?</li>
 </ul>
 <p>To answer these questions, several tasks need to be done from a basic data handing to setting up for visualization.</p>
 </div>
@@ -348,9 +348,9 @@ noise &lt;- filter(noise, !is.na(Latitude) | !is.na(Longitude)) %&gt;%
   select(Created.Date, Complaint.Type, Borough, Latitude, Longitude)</code></pre>
 <p>Let’s look at data sample.</p>
 <pre class="r"><code>## Data Sample
-datatable(head(noise), options = list(searching = F, pageLength = 3))</code></pre>
-<div id="htmlwidget-c5fb11deb716cd2479e5" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-c5fb11deb716cd2479e5">{"x":{"filter":"none","data":[["1","2","3","4","5","6"],["1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016"],["Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified"],["MANHATTAN","QUEENS","QUEENS","STATEN ISLAND","MANHATTAN","BROOKLYN"],[40.77449446,40.7448441,40.68950349,40.60606495,40.76389296,40.6982486],[-73.94974925,-73.87034735,-73.86036568,-74.06557749,-73.96047147,-73.92996453]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Created.Date<\/th>\n      <th>Complaint.Type<\/th>\n      <th>Borough<\/th>\n      <th>Latitude<\/th>\n      <th>Longitude<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"searching":false,"pageLength":3,"columnDefs":[{"className":"dt-right","targets":[4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[3,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+datatable(head(noise), options = list(searching = F, pageLength = 6))</code></pre>
+<div id="htmlwidget-3d85f8ebdfd0a7fb985e" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3d85f8ebdfd0a7fb985e">{"x":{"filter":"none","data":[["1","2","3","4","5","6"],["1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016"],["Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified"],["MANHATTAN","QUEENS","QUEENS","STATEN ISLAND","MANHATTAN","BROOKLYN"],[40.77449446,40.7448441,40.68950349,40.60606495,40.76389296,40.6982486],[-73.94974925,-73.87034735,-73.86036568,-74.06557749,-73.96047147,-73.92996453]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Created.Date<\/th>\n      <th>Complaint.Type<\/th>\n      <th>Borough<\/th>\n      <th>Latitude<\/th>\n      <th>Longitude<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"searching":false,"pageLength":6,"columnDefs":[{"className":"dt-right","targets":[4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[6,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
 <p>We need to convert values on date and information on location(Latitude and Longitude)</p>
 <pre class="r"><code>## Convert created date to POSIXlt object for using date elements
 noise$Created.Date &lt;- as.POSIXlt(noise$Created.Date, &quot;%m/%d/%Y&quot;, tz = &#39;EST&#39;)
@@ -359,13 +359,14 @@ noise &lt;- mutate(noise, year = noise$Created.Date$year + 1900, month = noise$C
 ## Round lat/lon to 3 decimals, to allow for density calculation based on location
 noise &lt;- mutate(noise, lat = signif(noise$Latitude, 5), lon = signif(noise$Longitude, 5))</code></pre>
 <p>The following tasks need to be done for mapping noise pollution by borough. This part includes downloading base maps of each borough, dividing raw data by borough.</p>
-<pre class="r"><code>## Download New York City map by borough from Google Map
+<pre class="r"><code>## Set Longitude and Latitude of each borough to aviod OVER_QURY_LIMIT error when use &#39;get_googlemap&#39; function
 Manhattan &lt;- c(&quot;lon&quot; = -73.97125, &quot;lat&quot; = 40.78306)
 Bronx &lt;- c(&quot;lon&quot; = -73.86483, &quot;lat&quot; = 40.84478)
 Brooklyn &lt;- c(&quot;lon&quot; = -73.94416, &quot;lat&quot; = 40.67818)
 Queens &lt;- c(&quot;lon&quot; = -73.79485,&quot;lat&quot; = 40.72822)
 StatenIsland &lt;- c(&quot;lon&quot; = -74.1502,&quot;lat&quot; = 40.57953)
 
+## Download New York City map by borough from Google Map
 manhMap &lt;- get_googlemap(Manhattan, maptype = &#39;roadmap&#39;, style = mapstyle, zoom = 12)
 bronMap &lt;- get_googlemap(Bronx, maptype = &#39;roadmap&#39;, style = mapstyle, zoom = 12)
 brooMap &lt;- get_googlemap(Brooklyn, maptype = &#39;roadmap&#39;, style = mapstyle, zoom = 12)
@@ -393,7 +394,7 @@ inquee &lt;- group_by(select(noise, -Created.Date), Borough, year) %&gt;%
 instat &lt;- group_by(select(noise, -Created.Date), Borough, year) %&gt;%
   subset(Borough==&#39;STATEN ISLAND&#39;) %&gt;%
   group_by(year)</code></pre>
-<p>Noise pollution is visualized by using 2D kernel density estimation provided from ggplot2 package. Each created ggmap for noise pollution by borough is stored in order to display properly in Result section.</p>
+<p>Noise pollution is visualized by using ‘stat_density2d’ function provided from ggplot2 package. This ‘stat_density2d’ function is to do 2D kernel density estimation. Each created ggmap for noise pollution by borough is stored in order to display properly in Result section.</p>
 <pre class="r"><code>## Set up ggmap to map distribution of noise by borough
 mp1 &lt;- ggmap(manhMap) +
   stat_density2d(aes(x=lon, y=lat, fill=&#39;red&#39;, alpha=..level.., size=0), data=inmanh, geom = &#39;polygon&#39;) +
@@ -447,8 +448,8 @@ caldata$date &lt;- as.POSIXct(caldata$date, &quot;%m/%d/%Y&quot;, tz = &quot;EST
 <h2>WHERE: Noise pollution by Borough</h2>
 <p>The following maps are showing where noise pollution occurs and a spatial pattern of noise pollution within each borough.</p>
 <pre class="r"><code>## Map noise pollution by borough
-#grid.arrange(mp1, mp2, mp3, mp4, mp5, ncol = 2)</code></pre>
-<p><img src="index_files/figure-html/Map%20noise%20pollution%202-1.png" width="672" /><img src="index_files/figure-html/Map%20noise%20pollution%202-2.png" width="672" /><img src="index_files/figure-html/Map%20noise%20pollution%202-3.png" width="672" /></p>
+grid.arrange(mp1, mp2, mp3, mp4, mp5, ncol = 2)</code></pre>
+<p><img src="index_files/figure-html/Map%20noise%20pollution%202-1.png" width="864" /><img src="index_files/figure-html/Map%20noise%20pollution%202-2.png" width="864" /><img src="index_files/figure-html/Map%20noise%20pollution%202-3.png" width="864" /></p>
 </div>
 <div id="what-noise-pollution-by-type" class="section level2">
 <h2>WHAT: Noise pollution by Type</h2>
@@ -462,19 +463,19 @@ ggplot(bynoisetype, aes(x=reorder(Complaint.Type, count), y=count, fill=Complain
   scale_y_continuous(labels=comma) +
   theme_bw() +
   geom_text(aes(label = paste0(round(bynoisetype$percent,2),&quot;%&quot;)), nudge_y=2)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/Plot%20noise%20type-1.png" width="864" /></p>
 </div>
 <div id="when-noise-pollution-by-date" class="section level2">
 <h2>WHEN: Noise pollution by Date</h2>
-<p>The following calander map illustrates noise pollution by day in 2016.</p>
-<pre class="r"><code>## Plot a calendar heatmap on Noise pollution by date
+<p>The following calender map illustrates noise pollution by day in 2016. It is easy to make a calendar map with ‘calenderPlot’ function.</p>
+<pre class="r"><code>## Plot a calendar heat map on Noise pollution by date
 calendarPlot(caldata, pollutant = &quot;count&quot;, year = 2016, main = &quot;Noise pollution by Date in 2016&quot;, cols=c(&#39;yellow&#39;,&#39;orange&#39;,&#39;red&#39;))</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/Calander%20heat%20map-1.png" width="864" /></p>
 </div>
 </div>
 <div id="conclusions" class="section level1">
 <h1>Conclusions</h1>
-<p>In this project, we investigated noise pollution in New York City. For Manhattan and Queens, noise pollution affects almost the whole area of these two boroughs. On the other hand, for Brookyn, Bronx, and Staten Island, noise pollution is located at some areas of these boroughs. Most attributable factors to noise pollution in New York City are coming from residential noise (about 53%). When we looked at calander heat map, noise pollution primarily occurs on weekend. Perhaps, it is because many people have a party and invite friends their house during the weekend.</p>
+<p>In this project, noise pollution in New York City is investigated based on three basic questions - Where, What and When. For Manhattan and Queens, noise pollution affects almost the whole area of these two boroughs. On the other hand, for Brookyn, Bronx, and Staten Island, noise pollution is located at some areas of these boroughs. Most attributable factors to noise pollution in New York City are coming from residential noise (about 53%). When we looked at calander heat map, noise pollution primarily occurs on weekend. Perhaps, it is because many people have a party and invite friends their house during the weekend.</p>
 <p>If possible, it would be interesting conduct the following research: - Examine noise pollution at hourly scale - Make interactive and dynamic noise pollution map - Examine spatial relationship noise pollution and heart disease</p>
 </div>
 <div id="references" class="section level1">
