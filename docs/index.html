@@ -349,8 +349,8 @@ noise &lt;- filter(noise, !is.na(Latitude) | !is.na(Longitude)) %&gt;%
 <p>Let’s look at data sample.</p>
 <pre class="r"><code>## Data Sample
 datatable(head(noise), options = list(searching = F, pageLength = 3))</code></pre>
-<div id="htmlwidget-53f1f8ae51236a93c109" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-53f1f8ae51236a93c109">{"x":{"filter":"none","data":[["1","2","3","4","5","6"],["1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016"],["Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified"],["MANHATTAN","QUEENS","QUEENS","STATEN ISLAND","MANHATTAN","BROOKLYN"],[40.77449446,40.7448441,40.68950349,40.60606495,40.76389296,40.6982486],[-73.94974925,-73.87034735,-73.86036568,-74.06557749,-73.96047147,-73.92996453]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Created.Date<\/th>\n      <th>Complaint.Type<\/th>\n      <th>Borough<\/th>\n      <th>Latitude<\/th>\n      <th>Longitude<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"searching":false,"pageLength":3,"columnDefs":[{"className":"dt-right","targets":[4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[3,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-20edadc69f98d3d672f1" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-20edadc69f98d3d672f1">{"x":{"filter":"none","data":[["1","2","3","4","5","6"],["1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016"],["Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified"],["MANHATTAN","QUEENS","QUEENS","STATEN ISLAND","MANHATTAN","BROOKLYN"],[40.77449446,40.7448441,40.68950349,40.60606495,40.76389296,40.6982486],[-73.94974925,-73.87034735,-73.86036568,-74.06557749,-73.96047147,-73.92996453]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Created.Date<\/th>\n      <th>Complaint.Type<\/th>\n      <th>Borough<\/th>\n      <th>Latitude<\/th>\n      <th>Longitude<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"searching":false,"pageLength":3,"columnDefs":[{"className":"dt-right","targets":[4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[3,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
 <p>We need to convert values on date and information on location(Latitude and Longitude)</p>
 <pre class="r"><code>## Convert created date to POSIXlt object for using date elements
 noise$Created.Date &lt;- as.POSIXlt(noise$Created.Date, &quot;%m/%d/%Y&quot;, tz = &#39;EST&#39;)
@@ -447,7 +447,8 @@ caldata$date &lt;- as.POSIXct(caldata$date, &quot;%m/%d/%Y&quot;, tz = &quot;EST
 <h2>WHERE: Noise pollution by Borough</h2>
 <p>The following maps are showing where noise pollution occurs and a spatial pattern of noise pollution within each borough.</p>
 <pre class="r"><code>## Map noise pollution by borough
-# grid.arrange(mp1, mp2, mp3, mp4, mp5, ncol = 2)</code></pre>
+grid.arrange(mp1, mp2, mp3, mp4, mp5, ncol = 2)</code></pre>
+<p><img src="index_files/figure-html/Map%20noise%20pollution-1.png" width="672" /></p>
 <p><img src="index_files/figure-html/unnamed-chunk-1-1.png" width="672" /><img src="index_files/figure-html/unnamed-chunk-1-2.png" width="672" /><img src="index_files/figure-html/unnamed-chunk-1-3.png" width="672" /> ## WHAT: Noise pollution by Type</p>
 <p>Below plot is illustrating distribution of noise pollution by type. We can find the source of noise pollution in New York City.</p>
 <pre class="r"><code>## Plot distribution of noise pollution by type
