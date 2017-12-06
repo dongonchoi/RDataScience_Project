@@ -310,8 +310,7 @@ div.tocify {
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Ru%C3%ADdo_Noise_041113GFDL.JPG/800px-Ru%C3%ADdo_Noise_041113GFDL.JPG" alt="alt text" width="800"></p>
-<p><small>source - <a href="https://commons.wikimedia.org" class="uri">https://commons.wikimedia.org</a></small></p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Ru%C3%ADdo_Noise_041113GFDL.JPG/800px-Ru%C3%ADdo_Noise_041113GFDL.JPG" alt="alt text" width="800"> <small>source - <a href="https://commons.wikimedia.org" class="uri">https://commons.wikimedia.org</a>. Lisence of this image is free to noncommercial reuse.</small></p>
 <p>Noise pollution is the one of serious problems especially in metropolitan areas such as New York City. Noise has a negative impact on dwellers’ health or well-being lives, and also the growing body of scientific evidence is showing direct health effect (Dominici, 2013, and WHO, 2011). Thus, noise needs to be considered the one of serious problems we have been going through. In this project, I will investigate noise pollution problems in New York City by visualizing and analyzing NYC Open Data’s dataset on 311 Service Requests to have a better understanding on this problems.</p>
 </div>
 <div id="materials-and-methods" class="section level1">
@@ -329,7 +328,7 @@ div.tocify {
 </div>
 <div id="data-preparation" class="section level2">
 <h2>Data preparation</h2>
-<p>Load any required packages. You might need to install some packages by typing <em>install.packages(“PACKAGE”)</em></p>
+<p>Load any required packages. You might need to install some packages by typing ‘install.packages(“PACKAGE”)’</p>
 <pre class="r"><code>## Load any required packages
 library(dplyr)
 library(tidyr)
@@ -348,18 +347,19 @@ noise &lt;- filter(noise, !is.na(Latitude) | !is.na(Longitude)) %&gt;%
   select(Created.Date, Complaint.Type, Borough, Latitude, Longitude)</code></pre>
 <p>Let’s look at data sample.</p>
 <pre class="r"><code>## Data Sample
-datatable(head(noise), options = list(searching = F, pageLength = 6))</code></pre>
-<div id="htmlwidget-3d85f8ebdfd0a7fb985e" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-3d85f8ebdfd0a7fb985e">{"x":{"filter":"none","data":[["1","2","3","4","5","6"],["1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016"],["Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified"],["MANHATTAN","QUEENS","QUEENS","STATEN ISLAND","MANHATTAN","BROOKLYN"],[40.77449446,40.7448441,40.68950349,40.60606495,40.76389296,40.6982486],[-73.94974925,-73.87034735,-73.86036568,-74.06557749,-73.96047147,-73.92996453]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Created.Date<\/th>\n      <th>Complaint.Type<\/th>\n      <th>Borough<\/th>\n      <th>Latitude<\/th>\n      <th>Longitude<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"searching":false,"pageLength":6,"columnDefs":[{"className":"dt-right","targets":[4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[6,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
-<p>We need to convert values on date and information on location(Latitude and Longitude)</p>
-<pre class="r"><code>## Convert created date to POSIXlt object for using date elements
+datatable(head(noise), options = list(searching = T, pageLength = 5))</code></pre>
+<div id="htmlwidget-85773586180ae0406496" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-85773586180ae0406496">{"x":{"filter":"none","data":[["1","2","3","4","5","6"],["1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016"],["Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified"],["MANHATTAN","QUEENS","QUEENS","STATEN ISLAND","MANHATTAN","BROOKLYN"],[40.77449446,40.7448441,40.68950349,40.60606495,40.76389296,40.6982486],[-73.94974925,-73.87034735,-73.86036568,-74.06557749,-73.96047147,-73.92996453]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Created.Date<\/th>\n      <th>Complaint.Type<\/th>\n      <th>Borough<\/th>\n      <th>Latitude<\/th>\n      <th>Longitude<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"searching":true,"pageLength":5,"columnDefs":[{"className":"dt-right","targets":[4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<p>We need to convert date format to ’POSIXlt’to handle date information properly. Also location values(Latitude and Longitude) need to be rounded to 3 decimals to conduct density calculation based on location.</p>
+<pre class="r"><code>## Convert values on Created.Date to POSIXlt object for using date elements
 noise$Created.Date &lt;- as.POSIXlt(noise$Created.Date, &quot;%m/%d/%Y&quot;, tz = &#39;EST&#39;)
 ## Create date fields to be used for time series analysis
 noise &lt;- mutate(noise, year = noise$Created.Date$year + 1900, month = noise$Created.Date$mon + 1, day = noise$Created.Date$mday)
 ## Round lat/lon to 3 decimals, to allow for density calculation based on location
 noise &lt;- mutate(noise, lat = signif(noise$Latitude, 5), lon = signif(noise$Longitude, 5))</code></pre>
 <p>The following tasks need to be done for mapping noise pollution by borough. This part includes downloading base maps of each borough, dividing raw data by borough.</p>
-<pre class="r"><code>## Set Longitude and Latitude of each borough to aviod OVER_QURY_LIMIT error when use &#39;get_googlemap&#39; function
+<pre class="r"><code>## Set Longitude and Latitude of each borough
+## By doing this, we can aviod OVER_QUERY_LIMIT error when use &#39;get_googlemap&#39; function
 Manhattan &lt;- c(&quot;lon&quot; = -73.97125, &quot;lat&quot; = 40.78306)
 Bronx &lt;- c(&quot;lon&quot; = -73.86483, &quot;lat&quot; = 40.84478)
 Brooklyn &lt;- c(&quot;lon&quot; = -73.94416, &quot;lat&quot; = 40.67818)
