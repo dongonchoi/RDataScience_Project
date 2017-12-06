@@ -6,31 +6,31 @@ author: "By Choi Dongon"
 
 # Introduction
 
-<img src="https://md-assets-east.azureedge.net/website-media-cache/1/d/c/7/e/b/1dc7eb19facf651baa3b7c5052f3d18103bde33c.jpg" alt="alt text" width="800">
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Ru%C3%ADdo_Noise_041113GFDL.JPG/800px-Ru%C3%ADdo_Noise_041113GFDL.JPG" alt="alt text" width="800">
 
-<small>source - https://www.marceldigital.com/blog/2015/08/what-is-content-noise</small>
+<small>source - https://commons.wikimedia.org</small>
 
-Noise pollution is the one of serious problems especially wherein metropolitan area such as New York City. Noise has a negative impact on dwellers' health or well-being lives, and also the growing body of scientific evidence is showing direct health effect (Dominici, 2013, and WHO, 2011). Thus, noise no longer needs to be considered just as an annoyance, but as one of serious problems we have been going through. In this project, I will investigate noise pollution problems in New York City by visualizing and analyzing NYC Open Data's dataset on 311 Service Requests to have a better understanding on this problems.
+Noise pollution is the one of serious problems especially in metropolitan areas such as New York City. Noise has a negative impact on dwellers' health or well-being lives, and also the growing body of scientific evidence is showing direct health effect (Dominici, 2013, and WHO, 2011). Thus, noise needs to be considered the one of serious problems we have been going through. In this project, I will investigate noise pollution problems in New York City by visualizing and analyzing NYC Open Data's dataset on 311 Service Requests to have a better understanding on this problems.
 
 
 # Materials and methods
 
-## Data source: 311 Service Requests
+## Data source: NYC311 Service Requests
 
-NYC311 provides 24/7 support to New Yorkers by providing a one-stop shop for a multitude of general needs. Within the proximity of the New York Metropolitan Area, callers can dial 311 to request for a variety of governmental services, such as filing a noise complaint, or to request for directions.
+NYC311 provides 24/7 support to New Yorkers by providing a one-stop shop for a multitude of general needs. Within the proximity of the New York Metropolitan Area, callers can dial 311 to request for a variety of governmental services, such as filing a noise complaint.
 
-The data set used in this project contains 311 Service Requests in 2016. Each observation contains 53 variables describing the service request, such as complaint type, date received, incident address, and resolution description. To reduce computational overhead, only five columns were used for this analysis. I will approach and analyze the data to answer the following three basic questions.
+The data set used in this project contains NYC311 Service Requests in 2016. Each observation contains 53 variables describing the service request, such as complaint type, date received, incident address, and resolution description. To reduce computational overhead, only five columns were used for this analysis. I will approach and analyze the data to answer the following three basic questions.
 
-1. WHERE: Is there any places where have been going through noise pollution?
-2. WHAT: Waht could be attributable to noise pollution?
-3. WHEN: Is there any temporal pattern, which is when dewellers experienced noise pollution?
+- WHERE: Where have gone through noise pollution?
+- WHAT: What could be contributable to noise pollution?
+- WHEN: When people in NYC have gone through noise pollution?
 
-For answering those questions, several tasks need to be done from a basic data handing to setting up for visualization. 
+To answer these questions, several tasks need to be done from a basic data handing to setting up for visualization. 
 
 ## Data preparation
 
-Load required packages
-```{r, message=F, warning=F}
+Load any required packages. You might need to install some packages by typing *install.packages("PACKAGE")*
+```{r, Load packages, message=F, warning=F}
 ## Load any required packages
 library(dplyr)
 library(tidyr)
@@ -39,45 +39,54 @@ library(ggmap)
 library(openair)
 library(scales)
 library(gridExtra)
+library(DT)
 ```
-
-```{r, message=F, warning=F, echo=F}
+```{r, Set Matstyle, message=F, warning=F, echo=F}
 mapstyle = "element:geometry%7Ccolor:0x212121&style=element:labels.icon%7Cvisibility:off&style=element:labels.text.fill%7Ccolor:0x757575&style=element:labels.text.stroke%7Ccolor:0x212121&style=feature:administrative%7Celement:geometry%7Ccolor:0x757575&style=feature:administrative.country%7Celement:labels.text.fill%7Ccolor:0x9e9e9e&style=feature:administrative.land_parcel%7Cvisibility:off&style=feature:administrative.locality%7Celement:labels.text.fill%7Ccolor:0xbdbdbd&style=feature:administrative.neighborhood%7Cvisibility:off&style=feature:poi%7Celement:labels.text%7Cvisibility:off&style=feature:poi%7Celement:labels.text.fill%7Ccolor:0x757575&style=feature:poi.business%7Cvisibility:off&style=feature:poi.park%7Celement:geometry%7Ccolor:0x181818&style=feature:poi.park%7Celement:labels.text.fill%7Ccolor:0x616161&style=feature:poi.park%7Celement:labels.text.stroke%7Ccolor:0x1b1b1b&style=feature:road%7Celement:geometry.fill%7Ccolor:0x2c2c2c&style=feature:road%7Celement:labels%7Cvisibility:off&style=feature:road%7Celement:labels.icon%7Cvisibility:off&style=feature:road%7Celement:labels.text.fill%7Ccolor:0x8a8a8a&style=feature:road.arterial%7Celement:geometry%7Ccolor:0x373737&style=feature:road.highway%7Celement:geometry%7Ccolor:0x3c3c3c&style=feature:road.highway.controlled_access%7Celement:geometry%7Ccolor:0x4e4e4e&style=feature:road.local%7Celement:labels.text.fill%7Ccolor:0x616161&style=feature:transit%7Cvisibility:off&style=feature:transit%7Celement:labels.text.fill%7Ccolor:0x757575&style=feature:water%7Celement:geometry%7Ccolor:0x000000&style=feature:water%7Celement:labels.text%7Cvisibility:off&style=feature:water%7Celement:labels.text.fill%7Ccolor:0x3d3d3"
 ```
 
-```{r, message=F, warning=F}
+The dataset used in this project is available at NYC Opean data website. We can download this data from [this link](https://nycopendata.socrata.com/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9). Due to the size of this dataset, I will load directly from my own computer after downloading the dataset.
+```{r, Load Data and filter, message=F, warning=F}
 ## Load NYC 311 noise complaints data
 noise <- read.csv('data/NYC_noise_2016_1.csv', stringsAsFactors = F) %>%
   tbl_df()
-
 ## Filter NYC 311 dataRemove missing data
 noise <- filter(noise, !is.na(Latitude) | !is.na(Longitude)) %>%
   select(Created.Date, Complaint.Type, Borough, Latitude, Longitude)
-
-## Data Sample
-head.matrix(noise, n = 5L)
 ```
 
-```{r, message=F, warning=F}
+Let's look at data sample.
+```{r, Show data sample, message=F, warning=F}
+## Data Sample
+datatable(head(noise), options = list(searching = F, pageLength = 3))
+```
+
+We need to convert values on date and information on location(Latitude and Longitude)
+```{r, Convert data, message=F, warning=F}
 ## Convert created date to POSIXlt object for using date elements
 noise$Created.Date <- as.POSIXlt(noise$Created.Date, "%m/%d/%Y", tz = 'EST')
-
 ## Create date fields to be used for time series analysis
-noise <- mutate(noise, year = noise$Created.Date$year + 1900)
-noise <- mutate(noise, month = noise$Created.Date$mon + 1)
-noise <- mutate(noise, day = noise$Created.Date$mday)
-
+noise <- mutate(noise, year = noise$Created.Date$year + 1900, month = noise$Created.Date$mon + 1, day = noise$Created.Date$mday)
 ## Round lat/lon to 3 decimals, to allow for density calculation based on location
-noise <- mutate(noise, lat = signif(noise$Latitude, 5))
-noise <- mutate(noise, lon = signif(noise$Longitude, 5))
+noise <- mutate(noise, lat = signif(noise$Latitude, 5), lon = signif(noise$Longitude, 5))
 ```
 
-```{r, message=F, warning=F}
-## Prepare to compare distribution of noise pollution by borough
-byborough <- group_by(select(noise, -Created.Date), Borough, year)
-byborough <- summarise(byborough, count = n())
-byborough <- group_by(byborough, year)
-byborough <- mutate(byborough, percent = byborough$count / sum(byborough$count) *100)
+The following tasks need to be done for mapping noise pollution by borough. This part includes downloading base maps of each borough, dividing raw data by borough.
+```{r, Downlad map, message=F, warning=T}
+## Download New York City map by borough from Google Map
+Manhattan <- c("lon" = -73.97125, "lat" = 40.78306)
+Bronx <- c("lon" = -73.86483, "lat" = 40.84478)
+Brooklyn <- c("lon" = -73.94416, "lat" = 40.67818)
+Queens <- c("lon" = -73.79485,"lat" = 40.72822)
+StatenIsland <- c("lon" = -74.1502,"lat" = 40.57953)
+
+manhMap <- get_googlemap(Manhattan, maptype = 'roadmap', style = mapstyle, zoom = 12)
+bronMap <- get_googlemap(Bronx, maptype = 'roadmap', style = mapstyle, zoom = 12)
+brooMap <- get_googlemap(Brooklyn, maptype = 'roadmap', style = mapstyle, zoom = 12)
+queeMap <- get_googlemap(Queens, maptype = 'roadmap', style = mapstyle, zoom = 12)
+statMap <- get_googlemap(StatenIsland, maptype = 'roadmap', style = mapstyle, zoom = 12)
+
+## Prepare to map distribution of noise by borough
 ## For Manhattan
 inmanh <- group_by(select(noise, -Created.Date), Borough, year) %>%
   subset(Borough=='MANHATTAN') %>%
@@ -98,16 +107,11 @@ inquee <- group_by(select(noise, -Created.Date), Borough, year) %>%
 instat <- group_by(select(noise, -Created.Date), Borough, year) %>%
   subset(Borough=='STATEN ISLAND') %>%
   group_by(year)
+```
 
-## Download New York City map by borough from Google Map
-nycMap <- get_googlemap("New York City", maptype='roadmap', style = mapstyle, zoom = 11)
-manhMap <- get_googlemap("Manhattan, NY", maptype = 'roadmap', style = mapstyle, zoom = 12)
-bronMap <- get_googlemap("Bronx, NY", maptype = 'roadmap', style = mapstyle, zoom = 12)
-brooMap <- get_googlemap("Brooklyn, NY", maptype = 'roadmap', style = mapstyle, zoom = 12)
-queeMap <- get_googlemap("Queens, NY", maptype = 'roadmap', style = mapstyle, zoom = 12)
-statMap <- get_googlemap("Staten Island, NY", maptype = 'roadmap', style = mapstyle, zoom = 12)
-
-## Set up ggmap to map noise pollution by borough
+Noise pollution is visualized by using 2D kernel density estimation provided from ggplot2 package. Each created ggmap for noise pollution by borough is stored in order to display properly in Result section. 
+```{r, Set up ggmap, message=F, warning=F}
+## Set up ggmap to map distribution of noise by borough
 mp1 <- ggmap(manhMap) +
   stat_density2d(aes(x=lon, y=lat, fill='red', alpha=..level.., size=0), data=inmanh, geom = 'polygon') +
   facet_wrap(~ Borough) + 
@@ -135,63 +139,48 @@ mp5 <- ggmap(statMap) +
   xlab("") + ylab("")
 ```
 
-```{r, message=F, warning=F}
-## Prepare to compare distribution of noise pollution by type
-bynoisetype <- group_by(select(noise, -Created.Date), Complaint.Type, year)
-bynoisetype <- summarise(bynoisetype, count = n())
-bynoisetype <- group_by(bynoisetype, year)
-bynoisetype <- mutate(bynoisetype, percent = bynoisetype$count / sum(bynoisetype$count)*100)
+To plot the distribution of noise pollution by type, we need to make new data from raw data.
+```{r, Prepare to plot noise type, message=F, warning=F}
+## Prepare to plot distribution of noise type
+bynoisetype <- group_by(select(noise, -Created.Date), Complaint.Type, year) %>%
+  summarise(count = n()) %>%
+  group_by(year) %>%
+  mutate(percent = count / sum(count)*100)
 ```
 
-```{r, message=F, warning=F}
+To create calander heat map, we need to load raw dataset and modify data.
+```{r, Set tup data for date analysis, message=F, warning=F}
 ## Set up data for date analysis
+## Load raw dataset for date analysis
 noisedf <- read.csv('data/NYC_noise_2016_1.csv', stringsAsFactors = F) %>%
   filter(!is.na(Created.Date)) %>%
   select(-Location)
-caldata <- select(noisedf, Created.Date, Unique.Key)
-caldata <- mutate(caldata, Created.Date = as.character(Created.Date))
-caldata <- mutate(caldata, Created.Date = substr(Created.Date, 0, 10))
-caldata <- group_by(caldata, Created.Date)
-caldata <- summarise(caldata, count = n())
+## Prepare to plot calander heat map
+caldata <- select(noisedf, Created.Date, Unique.Key) %>%
+  mutate(Created.Date = as.character(Created.Date), Created.Date = substr(Created.Date, 0, 10)) %>%
+  group_by(Created.Date) %>%
+  summarise(count = n())
 names(caldata)[1] <- "date"
 caldata$date <- as.POSIXct(caldata$date, "%m/%d/%Y", tz = "EST")
 ```
 
 # Results
-
-Now, visualization and data analysis will be conducted based on data preparation works to answer the three questions; WHERE, WAHT, WHEN.
-
 ## WHERE: Noise pollution by Borough
+The following maps are showing where noise pollution occurs and a spatial pattern of noise pollution within each borough.
 
-```{r, warning=F, message=F}
+```{r, Map noise pollution, warning=F, message=F}
 ## Map noise pollution by borough
-grid.arrange(mp1, mp2, nrow = 1, ncol = 2)
-grid.arrange(mp3, mp4, nrow = 1, ncol = 2)
-grid.arrange(mp5, nrow = 1, ncol = 2)
+# grid.arrange(mp1, mp2, mp3, mp4, mp5, ncol = 2)
 ```
-
-```{r, warning=F, message=F}
-## Plot distribution of noise pollution by borough
-ggplot(byborough, aes(x = reorder(Borough, -count), y = count, fill = Borough)) + 
-  geom_bar(stat = 'identity') + 
-  ggtitle('Distribution of Noise pollution by Borough') +
-  xlab("Borough") + ylab('Count') +
-  scale_y_continuous(labels=comma) +
-  theme_bw()+
-  geom_text(aes(label = paste0(round(byborough$percent,2),"%")), size = 5, hjust = 0.5, vjust = 2, position = 'identity')
+```{r, warning=F, message=F, echo=F}
+grid.arrange(mp1, mp2, ncol = 2)
+grid.arrange(mp3, mp4, ncol = 2)
+grid.arrange(mp5, ncol = 2)
 ```
-
 ## WHAT: Noise pollution by Type
 
+Below plot is illustrating distribution of noise pollution by type. We can find the source of noise pollution in New York City.
 ```{r, warning=F, message=F}
-## Map noise pollution by noise type
-ggmap(nycMap) +
-  stat_density2d(aes(x=lon, y=lat, fill='red', alpha=..level.., size=0), data=noise, geom = 'polygon') +
-  facet_wrap(~ Complaint.Type, nrow = 2, ncol = 5) + 
-  ggtitle("Noise Pollution by Type") + 
-  theme(axis.ticks = element_blank(), axis.text.x = element_blank(), axis.text.y = element_blank(), legend.position = 'none') +
-  xlab("") + ylab("")
-
 ## Plot distribution of noise pollution by type
 ggplot(bynoisetype, aes(x=reorder(Complaint.Type, count), y=count, fill=Complaint.Type))+ 
   geom_bar(stat = 'identity') +
@@ -204,6 +193,7 @@ ggplot(bynoisetype, aes(x=reorder(Complaint.Type, count), y=count, fill=Complain
 ```
 
 ## WHEN: Noise pollution by Date
+The following calander map illustrates noise pollution by day in 2016.
 
 ```{r, message=F, warning=F}
 ## Plot a calendar heatmap on Noise pollution by date
@@ -212,14 +202,19 @@ calendarPlot(caldata, pollutant = "count", year = 2016, main = "Noise pollution 
 
 # Conclusions
 
-Noise pollutionsummary the results. further questions. (upcoming)
+In this project, we investigated noise pollution in New York City. For Manhattan and Queens, noise pollution affects almost the whole area of these two boroughs. On the other hand, for Brookyn, Bronx, and Staten Island, noise pollution is located at some areas of these boroughs. Most attributable factors to noise pollution in New York City are coming from residential noise (about 53%). When we looked at calander heat map, noise pollution primarily occurs on weekend. Perhaps, it is because many people have a party and invite friends their house during the weekend.
+
+If possible, it would be interesting conduct the following research:
+- Examine noise pollution at hourly scale
+- Make interactive and dynamic noise pollution map
+- Examine spatial relationship noise pollution and heart disease
 
 # References
 
-[1] Dominici, 2013, Residential exposure to aircraft noise and hospital admissions for cardiovascular diseases: multi-airport retrospective study, British Medical Journal.
+Dominici, 2013, Residential exposure to aircraft noise and hospital admissions for cardiovascular diseases: multi-airport retrospective study, British Medical Journal.
 
-[2] NYC Open Data - https://opendata.cityofnewyork.us/
+NYC Open Data - https://opendata.cityofnewyork.us/
 
-[3] NYC Data Science Academy Blog - https://nycdatascience.com/blog/
+NYC Data Science Academy Blog - https://nycdatascience.com/blog/
 
-[4] WHO, 2011, Burden of Disease from Environmental Noise.
+WHO, 2011, Burden of Disease from Environmental Noise.

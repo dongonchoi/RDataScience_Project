@@ -14,7 +14,7 @@
 
 <title>Visualize Noise pollution in New York City</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/jquery-1.12.4/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/simplex.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -26,6 +26,11 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-1.1/highlight.js"></script>
+<script src="site_libs/htmlwidgets-0.9/htmlwidgets.js"></script>
+<script src="site_libs/datatables-binding-0.2/datatables.js"></script>
+<link href="site_libs/dt-core-1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.10.12/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.10.12/js/jquery.dataTables.min.js"></script>
 <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -305,26 +310,26 @@ div.tocify {
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p><img src="https://md-assets-east.azureedge.net/website-media-cache/1/d/c/7/e/b/1dc7eb19facf651baa3b7c5052f3d18103bde33c.jpg" alt="alt text" width="800"></p>
-<p><small>source - <a href="https://www.marceldigital.com/blog/2015/08/what-is-content-noise" class="uri">https://www.marceldigital.com/blog/2015/08/what-is-content-noise</a></small></p>
-<p>Noise pollution is the one of serious problems especially wherein metropolitan area such as New York City. Noise has a negative impact on dwellers’ health or well-being lives, and also the growing body of scientific evidence is showing direct health effect (Dominici, 2013, and WHO, 2011). Thus, noise no longer needs to be considered just as an annoyance, but as one of serious problems we have been going through. In this project, I will investigate noise pollution problems in New York City by visualizing and analyzing NYC Open Data’s dataset on 311 Service Requests to have a better understanding on this problems.</p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Ru%C3%ADdo_Noise_041113GFDL.JPG/800px-Ru%C3%ADdo_Noise_041113GFDL.JPG" alt="alt text" width="800"></p>
+<p><small>source - <a href="https://commons.wikimedia.org" class="uri">https://commons.wikimedia.org</a></small></p>
+<p>Noise pollution is the one of serious problems especially in metropolitan areas such as New York City. Noise has a negative impact on dwellers’ health or well-being lives, and also the growing body of scientific evidence is showing direct health effect (Dominici, 2013, and WHO, 2011). Thus, noise needs to be considered the one of serious problems we have been going through. In this project, I will investigate noise pollution problems in New York City by visualizing and analyzing NYC Open Data’s dataset on 311 Service Requests to have a better understanding on this problems.</p>
 </div>
 <div id="materials-and-methods" class="section level1">
 <h1>Materials and methods</h1>
-<div id="data-source-311-service-requests" class="section level2">
-<h2>Data source: 311 Service Requests</h2>
-<p>NYC311 provides 24/7 support to New Yorkers by providing a one-stop shop for a multitude of general needs. Within the proximity of the New York Metropolitan Area, callers can dial 311 to request for a variety of governmental services, such as filing a noise complaint, or to request for directions.</p>
-<p>The data set used in this project contains 311 Service Requests in 2016. Each observation contains 53 variables describing the service request, such as complaint type, date received, incident address, and resolution description. To reduce computational overhead, only five columns were used for this analysis. I will approach and analyze the data to answer the following three basic questions.</p>
-<ol style="list-style-type: decimal">
-<li>WHERE: Is there any places where have been going through noise pollution?</li>
-<li>WHAT: Waht could be attributable to noise pollution?</li>
-<li>WHEN: Is there any temporal pattern, which is when dewellers experienced noise pollution?</li>
-</ol>
-<p>For answering those questions, several tasks need to be done from a basic data handing to setting up for visualization.</p>
+<div id="data-source-nyc311-service-requests" class="section level2">
+<h2>Data source: NYC311 Service Requests</h2>
+<p>NYC311 provides 24/7 support to New Yorkers by providing a one-stop shop for a multitude of general needs. Within the proximity of the New York Metropolitan Area, callers can dial 311 to request for a variety of governmental services, such as filing a noise complaint.</p>
+<p>The data set used in this project contains NYC311 Service Requests in 2016. Each observation contains 53 variables describing the service request, such as complaint type, date received, incident address, and resolution description. To reduce computational overhead, only five columns were used for this analysis. I will approach and analyze the data to answer the following three basic questions.</p>
+<ul>
+<li>WHERE: Where have gone through noise pollution?</li>
+<li>WHAT: What could be contributable to noise pollution?</li>
+<li>WHEN: When people in NYC have gone through noise pollution?</li>
+</ul>
+<p>To answer these questions, several tasks need to be done from a basic data handing to setting up for visualization.</p>
 </div>
 <div id="data-preparation" class="section level2">
 <h2>Data preparation</h2>
-<p>Load required packages</p>
+<p>Load any required packages. You might need to install some packages by typing <em>install.packages(“PACKAGE”)</em></p>
 <pre class="r"><code>## Load any required packages
 library(dplyr)
 library(tidyr)
@@ -332,41 +337,42 @@ library(ggplot2)
 library(ggmap)
 library(openair)
 library(scales)
-library(gridExtra)</code></pre>
+library(gridExtra)
+library(DT)</code></pre>
+<p>The dataset used in this project is available at NYC Opean data website. We can download this data from <a href="https://nycopendata.socrata.com/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9">this link</a>. Due to the size of this dataset, I will load directly from my own computer after downloading the dataset.</p>
 <pre class="r"><code>## Load NYC 311 noise complaints data
 noise &lt;- read.csv(&#39;data/NYC_noise_2016_1.csv&#39;, stringsAsFactors = F) %&gt;%
   tbl_df()
-
 ## Filter NYC 311 dataRemove missing data
 noise &lt;- filter(noise, !is.na(Latitude) | !is.na(Longitude)) %&gt;%
-  select(Created.Date, Complaint.Type, Borough, Latitude, Longitude)
-
-## Data Sample
-head.matrix(noise, n = 5L)</code></pre>
-<pre><code>## # A tibble: 5 x 5
-##   Created.Date      Complaint.Type       Borough Latitude Longitude
-##          &lt;chr&gt;               &lt;chr&gt;         &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;
-## 1     1/1/2016 Noise - Unspecified     MANHATTAN 40.77449 -73.94975
-## 2     1/1/2016 Noise - Unspecified        QUEENS 40.74484 -73.87035
-## 3     1/1/2016 Noise - Unspecified        QUEENS 40.68950 -73.86037
-## 4     1/1/2016 Noise - Unspecified STATEN ISLAND 40.60606 -74.06558
-## 5     1/1/2016 Noise - Unspecified     MANHATTAN 40.76389 -73.96047</code></pre>
+  select(Created.Date, Complaint.Type, Borough, Latitude, Longitude)</code></pre>
+<p>Let’s look at data sample.</p>
+<pre class="r"><code>## Data Sample
+datatable(head(noise), options = list(searching = F, pageLength = 3))</code></pre>
+<div id="htmlwidget-53f1f8ae51236a93c109" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-53f1f8ae51236a93c109">{"x":{"filter":"none","data":[["1","2","3","4","5","6"],["1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016"],["Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified"],["MANHATTAN","QUEENS","QUEENS","STATEN ISLAND","MANHATTAN","BROOKLYN"],[40.77449446,40.7448441,40.68950349,40.60606495,40.76389296,40.6982486],[-73.94974925,-73.87034735,-73.86036568,-74.06557749,-73.96047147,-73.92996453]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Created.Date<\/th>\n      <th>Complaint.Type<\/th>\n      <th>Borough<\/th>\n      <th>Latitude<\/th>\n      <th>Longitude<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"searching":false,"pageLength":3,"columnDefs":[{"className":"dt-right","targets":[4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[3,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<p>We need to convert values on date and information on location(Latitude and Longitude)</p>
 <pre class="r"><code>## Convert created date to POSIXlt object for using date elements
 noise$Created.Date &lt;- as.POSIXlt(noise$Created.Date, &quot;%m/%d/%Y&quot;, tz = &#39;EST&#39;)
-
 ## Create date fields to be used for time series analysis
-noise &lt;- mutate(noise, year = noise$Created.Date$year + 1900)
-noise &lt;- mutate(noise, month = noise$Created.Date$mon + 1)
-noise &lt;- mutate(noise, day = noise$Created.Date$mday)
-
+noise &lt;- mutate(noise, year = noise$Created.Date$year + 1900, month = noise$Created.Date$mon + 1, day = noise$Created.Date$mday)
 ## Round lat/lon to 3 decimals, to allow for density calculation based on location
-noise &lt;- mutate(noise, lat = signif(noise$Latitude, 5))
-noise &lt;- mutate(noise, lon = signif(noise$Longitude, 5))</code></pre>
-<pre class="r"><code>## Prepare to compare distribution of noise pollution by borough
-byborough &lt;- group_by(select(noise, -Created.Date), Borough, year)
-byborough &lt;- summarise(byborough, count = n())
-byborough &lt;- group_by(byborough, year)
-byborough &lt;- mutate(byborough, percent = byborough$count / sum(byborough$count) *100)
+noise &lt;- mutate(noise, lat = signif(noise$Latitude, 5), lon = signif(noise$Longitude, 5))</code></pre>
+<p>The following tasks need to be done for mapping noise pollution by borough. This part includes downloading base maps of each borough, dividing raw data by borough.</p>
+<pre class="r"><code>## Download New York City map by borough from Google Map
+Manhattan &lt;- c(&quot;lon&quot; = -73.97125, &quot;lat&quot; = 40.78306)
+Bronx &lt;- c(&quot;lon&quot; = -73.86483, &quot;lat&quot; = 40.84478)
+Brooklyn &lt;- c(&quot;lon&quot; = -73.94416, &quot;lat&quot; = 40.67818)
+Queens &lt;- c(&quot;lon&quot; = -73.79485,&quot;lat&quot; = 40.72822)
+StatenIsland &lt;- c(&quot;lon&quot; = -74.1502,&quot;lat&quot; = 40.57953)
+
+manhMap &lt;- get_googlemap(Manhattan, maptype = &#39;roadmap&#39;, style = mapstyle, zoom = 12)
+bronMap &lt;- get_googlemap(Bronx, maptype = &#39;roadmap&#39;, style = mapstyle, zoom = 12)
+brooMap &lt;- get_googlemap(Brooklyn, maptype = &#39;roadmap&#39;, style = mapstyle, zoom = 12)
+queeMap &lt;- get_googlemap(Queens, maptype = &#39;roadmap&#39;, style = mapstyle, zoom = 12)
+statMap &lt;- get_googlemap(StatenIsland, maptype = &#39;roadmap&#39;, style = mapstyle, zoom = 12)
+
+## Prepare to map distribution of noise by borough
 ## For Manhattan
 inmanh &lt;- group_by(select(noise, -Created.Date), Borough, year) %&gt;%
   subset(Borough==&#39;MANHATTAN&#39;) %&gt;%
@@ -386,17 +392,9 @@ inquee &lt;- group_by(select(noise, -Created.Date), Borough, year) %&gt;%
 ## For Staten Island
 instat &lt;- group_by(select(noise, -Created.Date), Borough, year) %&gt;%
   subset(Borough==&#39;STATEN ISLAND&#39;) %&gt;%
-  group_by(year)
-
-## Download New York City map by borough from Google Map
-nycMap &lt;- get_googlemap(&quot;New York City&quot;, maptype=&#39;roadmap&#39;, style = mapstyle, zoom = 11)
-manhMap &lt;- get_googlemap(&quot;Manhattan, NY&quot;, maptype = &#39;roadmap&#39;, style = mapstyle, zoom = 12)
-bronMap &lt;- get_googlemap(&quot;Bronx, NY&quot;, maptype = &#39;roadmap&#39;, style = mapstyle, zoom = 12)
-brooMap &lt;- get_googlemap(&quot;Brooklyn, NY&quot;, maptype = &#39;roadmap&#39;, style = mapstyle, zoom = 12)
-queeMap &lt;- get_googlemap(&quot;Queens, NY&quot;, maptype = &#39;roadmap&#39;, style = mapstyle, zoom = 12)
-statMap &lt;- get_googlemap(&quot;Staten Island, NY&quot;, maptype = &#39;roadmap&#39;, style = mapstyle, zoom = 12)
-
-## Set up ggmap to map noise pollution by borough
+  group_by(year)</code></pre>
+<p>Noise pollution is visualized by using 2D kernel density estimation provided from ggplot2 package. Each created ggmap for noise pollution by borough is stored in order to display properly in Result section.</p>
+<pre class="r"><code>## Set up ggmap to map distribution of noise by borough
 mp1 &lt;- ggmap(manhMap) +
   stat_density2d(aes(x=lon, y=lat, fill=&#39;red&#39;, alpha=..level.., size=0), data=inmanh, geom = &#39;polygon&#39;) +
   facet_wrap(~ Borough) + 
@@ -422,56 +420,36 @@ mp5 &lt;- ggmap(statMap) +
   facet_wrap(~ Borough) + 
   theme(axis.ticks = element_blank(), axis.text.x = element_blank(), axis.text.y = element_blank(), legend.position = &#39;none&#39;) +
   xlab(&quot;&quot;) + ylab(&quot;&quot;)</code></pre>
-<pre class="r"><code>## Prepare to compare distribution of noise pollution by type
-bynoisetype &lt;- group_by(select(noise, -Created.Date), Complaint.Type, year)
-bynoisetype &lt;- summarise(bynoisetype, count = n())
-bynoisetype &lt;- group_by(bynoisetype, year)
-bynoisetype &lt;- mutate(bynoisetype, percent = bynoisetype$count / sum(bynoisetype$count)*100)</code></pre>
+<p>To plot the distribution of noise pollution by type, we need to make new data from raw data.</p>
+<pre class="r"><code>## Prepare to plot distribution of noise type
+bynoisetype &lt;- group_by(select(noise, -Created.Date), Complaint.Type, year) %&gt;%
+  summarise(count = n()) %&gt;%
+  group_by(year) %&gt;%
+  mutate(percent = count / sum(count)*100)</code></pre>
+<p>To create calander heat map, we need to load raw dataset and modify data.</p>
 <pre class="r"><code>## Set up data for date analysis
+## Load raw dataset for date analysis
 noisedf &lt;- read.csv(&#39;data/NYC_noise_2016_1.csv&#39;, stringsAsFactors = F) %&gt;%
   filter(!is.na(Created.Date)) %&gt;%
   select(-Location)
-caldata &lt;- select(noisedf, Created.Date, Unique.Key)
-caldata &lt;- mutate(caldata, Created.Date = as.character(Created.Date))
-caldata &lt;- mutate(caldata, Created.Date = substr(Created.Date, 0, 10))
-caldata &lt;- group_by(caldata, Created.Date)
-caldata &lt;- summarise(caldata, count = n())
+## Prepare to plot calander heat map
+caldata &lt;- select(noisedf, Created.Date, Unique.Key) %&gt;%
+  mutate(Created.Date = as.character(Created.Date), Created.Date = substr(Created.Date, 0, 10)) %&gt;%
+  group_by(Created.Date) %&gt;%
+  summarise(count = n())
 names(caldata)[1] &lt;- &quot;date&quot;
 caldata$date &lt;- as.POSIXct(caldata$date, &quot;%m/%d/%Y&quot;, tz = &quot;EST&quot;)</code></pre>
 </div>
 </div>
 <div id="results" class="section level1">
 <h1>Results</h1>
-<p>Now, visualization and data analysis will be conducted based on data preparation works to answer the three questions; WHERE, WAHT, WHEN.</p>
 <div id="where-noise-pollution-by-borough" class="section level2">
 <h2>WHERE: Noise pollution by Borough</h2>
+<p>The following maps are showing where noise pollution occurs and a spatial pattern of noise pollution within each borough.</p>
 <pre class="r"><code>## Map noise pollution by borough
-grid.arrange(mp1, mp2, nrow = 1, ncol = 2)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-<pre class="r"><code>grid.arrange(mp3, mp4, nrow = 1, ncol = 2)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-8-2.png" width="672" /></p>
-<pre class="r"><code>grid.arrange(mp5, nrow = 1, ncol = 2)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-8-3.png" width="672" /></p>
-<pre class="r"><code>## Plot distribution of noise pollution by borough
-ggplot(byborough, aes(x = reorder(Borough, -count), y = count, fill = Borough)) + 
-  geom_bar(stat = &#39;identity&#39;) + 
-  ggtitle(&#39;Distribution of Noise pollution by Borough&#39;) +
-  xlab(&quot;Borough&quot;) + ylab(&#39;Count&#39;) +
-  scale_y_continuous(labels=comma) +
-  theme_bw()+
-  geom_text(aes(label = paste0(round(byborough$percent,2),&quot;%&quot;)), size = 5, hjust = 0.5, vjust = 2, position = &#39;identity&#39;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
-</div>
-<div id="what-noise-pollution-by-type" class="section level2">
-<h2>WHAT: Noise pollution by Type</h2>
-<pre class="r"><code>## Map noise pollution by noise type
-ggmap(nycMap) +
-  stat_density2d(aes(x=lon, y=lat, fill=&#39;red&#39;, alpha=..level.., size=0), data=noise, geom = &#39;polygon&#39;) +
-  facet_wrap(~ Complaint.Type, nrow = 2, ncol = 5) + 
-  ggtitle(&quot;Noise Pollution by Type&quot;) + 
-  theme(axis.ticks = element_blank(), axis.text.x = element_blank(), axis.text.y = element_blank(), legend.position = &#39;none&#39;) +
-  xlab(&quot;&quot;) + ylab(&quot;&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+# grid.arrange(mp1, mp2, mp3, mp4, mp5, ncol = 2)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" width="672" /><img src="index_files/figure-html/unnamed-chunk-1-2.png" width="672" /><img src="index_files/figure-html/unnamed-chunk-1-3.png" width="672" /> ## WHAT: Noise pollution by Type</p>
+<p>Below plot is illustrating distribution of noise pollution by type. We can find the source of noise pollution in New York City.</p>
 <pre class="r"><code>## Plot distribution of noise pollution by type
 ggplot(bynoisetype, aes(x=reorder(Complaint.Type, count), y=count, fill=Complaint.Type))+ 
   geom_bar(stat = &#39;identity&#39;) +
@@ -481,25 +459,27 @@ ggplot(bynoisetype, aes(x=reorder(Complaint.Type, count), y=count, fill=Complain
   scale_y_continuous(labels=comma) +
   theme_bw() +
   geom_text(aes(label = paste0(round(bynoisetype$percent,2),&quot;%&quot;)), nudge_y=2)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 </div>
 <div id="when-noise-pollution-by-date" class="section level2">
 <h2>WHEN: Noise pollution by Date</h2>
+<p>The following calander map illustrates noise pollution by day in 2016.</p>
 <pre class="r"><code>## Plot a calendar heatmap on Noise pollution by date
 calendarPlot(caldata, pollutant = &quot;count&quot;, year = 2016, main = &quot;Noise pollution by Date in 2016&quot;, cols=c(&#39;yellow&#39;,&#39;orange&#39;,&#39;red&#39;))</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 </div>
 </div>
 <div id="conclusions" class="section level1">
 <h1>Conclusions</h1>
-<p>Noise pollutionsummary the results. further questions. (upcoming)</p>
+<p>In this project, we investigated noise pollution in New York City. For Manhattan and Queens, noise pollution affects almost the whole area of these two boroughs. On the other hand, for Brookyn, Bronx, and Staten Island, noise pollution is located at some areas of these boroughs. Most attributable factors to noise pollution in New York City are coming from residential noise (about 53%). When we looked at calander heat map, noise pollution primarily occurs on weekend. Perhaps, it is because many people have a party and invite friends their house during the weekend.</p>
+<p>If possible, it would be interesting conduct the following research: - Examine noise pollution at hourly scale - Make interactive and dynamic noise pollution map - Examine spatial relationship noise pollution and heart disease</p>
 </div>
 <div id="references" class="section level1">
 <h1>References</h1>
-<p>[1] Dominici, 2013, Residential exposure to aircraft noise and hospital admissions for cardiovascular diseases: multi-airport retrospective study, British Medical Journal.</p>
-<p>[2] NYC Open Data - <a href="https://opendata.cityofnewyork.us/" class="uri">https://opendata.cityofnewyork.us/</a></p>
-<p>[3] NYC Data Science Academy Blog - <a href="https://nycdatascience.com/blog/" class="uri">https://nycdatascience.com/blog/</a></p>
-<p>[4] WHO, 2011, Burden of Disease from Environmental Noise.</p>
+<p>Dominici, 2013, Residential exposure to aircraft noise and hospital admissions for cardiovascular diseases: multi-airport retrospective study, British Medical Journal.</p>
+<p>NYC Open Data - <a href="https://opendata.cityofnewyork.us/" class="uri">https://opendata.cityofnewyork.us/</a></p>
+<p>NYC Data Science Academy Blog - <a href="https://nycdatascience.com/blog/" class="uri">https://nycdatascience.com/blog/</a></p>
+<p>WHO, 2011, Burden of Disease from Environmental Noise.</p>
 </div>
 
 <!-- give the footer some space -->
