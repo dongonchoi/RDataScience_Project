@@ -19,9 +19,9 @@ NYC311 provides 24/7 support to New Yorkers by providing a one-stop shop for a m
 
 The data set used in this project is NYC311 Service Requests data in 2016. Each observation contains 53 variables describing the service request, such as complaint type, date received, incident address, and resolution description. To reduce computational overhead, only several columns will be used. I will visualize and analyze the data to answer the following three basic questions:
 
-- **WHERE:** Where have gone through noise pollution?
-- **WHAT:** What could be contributable to noise pollution?
-- **WHEN:** When people in NYC have gone through noise pollution?
+- **WHERE:** Where does noise pollution occur?
+- **WHAT:** What are contributable factors?
+- **WHEN:** When does noise pollution take place?
 
 To answer these questions, several tasks need to be done which include from a basic data handing to setting up for visualization. 
 
@@ -203,7 +203,7 @@ calendarPlot(caldata, pollutant = "count", year = 2016, main = "Noise pollution 
 
 # Conclusions
 
-In this project, noise pollution in New York City is investigated based on three basic questions - Where, What and When. For Manhattan and Queens, noise pollution affects almost the whole area of these two boroughs. On the other hand, for Brookyn, Bronx, and Staten Island, noise pollution is located at some areas of these boroughs. Most attributable factors to noise pollution in New York City are coming from residential noise (about 53%). When we looked at calander heat map, noise pollution primarily occurs on weekend. Perhaps, it is because many people have a party and invite friends their house during the weekend.
+In this project, noise pollution in New York City is investigated based on three basic questions - Where, What and When. For Manhattan and Queens, noise pollution affects almost the whole area of these two boroughs. On the other hand, for Brookyn, Bronx, and Staten Island, noise pollutions are located at some areas of these boroughs. The most contributable factor to noise pollution in New York City is residential noise (about 53%). When we looked at calander heat map, noise pollution primarily occurs on weekend. Perhaps, it is because many people invite friends to their houses and have a party with playing music, making some noise. We've looked at some visualizations on noise pollution in New York City. It would be helpful to understand noise pollution in New York City.
 
 If possible, it would be interesting conduct the following research:
 - Examine noise pollution at hourly scale

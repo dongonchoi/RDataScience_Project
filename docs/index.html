@@ -320,9 +320,9 @@ div.tocify {
 <p>NYC311 provides 24/7 support to New Yorkers by providing a one-stop shop for a multitude of general needs. Within the proximity of the New York Metropolitan Area, callers can dial 311 to request for a variety of governmental services, such as filing a noise complaint.</p>
 <p>The data set used in this project is NYC311 Service Requests data in 2016. Each observation contains 53 variables describing the service request, such as complaint type, date received, incident address, and resolution description. To reduce computational overhead, only several columns will be used. I will visualize and analyze the data to answer the following three basic questions:</p>
 <ul>
-<li><strong>WHERE:</strong> Where have gone through noise pollution?</li>
-<li><strong>WHAT:</strong> What could be contributable to noise pollution?</li>
-<li><strong>WHEN:</strong> When people in NYC have gone through noise pollution?</li>
+<li><strong>WHERE:</strong> Where does noise pollution occur?</li>
+<li><strong>WHAT:</strong> What are contributable factors?</li>
+<li><strong>WHEN:</strong> When does noise pollution take place?</li>
 </ul>
 <p>To answer these questions, several tasks need to be done which include from a basic data handing to setting up for visualization.</p>
 </div>
@@ -348,8 +348,8 @@ noise &lt;- filter(noise, !is.na(Latitude) | !is.na(Longitude)) %&gt;%
 <p>Let’s look at the data sample. After filtering, the data has five columns which contain noise information on date, type, region and location(lon, lat) respectively.</p>
 <pre class="r"><code>## Data Sample
 datatable(head(noise), options = list(searching = T, pageLength = 5))</code></pre>
-<div id="htmlwidget-36b304a424198398b61a" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-36b304a424198398b61a">{"x":{"filter":"none","data":[["1","2","3","4","5","6"],["1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016"],["Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified"],["MANHATTAN","QUEENS","QUEENS","STATEN ISLAND","MANHATTAN","BROOKLYN"],[40.77449446,40.7448441,40.68950349,40.60606495,40.76389296,40.6982486],[-73.94974925,-73.87034735,-73.86036568,-74.06557749,-73.96047147,-73.92996453]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Created.Date<\/th>\n      <th>Complaint.Type<\/th>\n      <th>Borough<\/th>\n      <th>Latitude<\/th>\n      <th>Longitude<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"searching":true,"pageLength":5,"columnDefs":[{"className":"dt-right","targets":[4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-502faf8065135eb12a6b" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-502faf8065135eb12a6b">{"x":{"filter":"none","data":[["1","2","3","4","5","6"],["1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016"],["Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified"],["MANHATTAN","QUEENS","QUEENS","STATEN ISLAND","MANHATTAN","BROOKLYN"],[40.77449446,40.7448441,40.68950349,40.60606495,40.76389296,40.6982486],[-73.94974925,-73.87034735,-73.86036568,-74.06557749,-73.96047147,-73.92996453]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Created.Date<\/th>\n      <th>Complaint.Type<\/th>\n      <th>Borough<\/th>\n      <th>Latitude<\/th>\n      <th>Longitude<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"searching":true,"pageLength":5,"columnDefs":[{"className":"dt-right","targets":[4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
 <p>We need to convert date format to ’POSIXlt’to handle date information properly. Also location values(Latitude and Longitude) need to be rounded to 3 decimals to conduct density calculation based on location.</p>
 <pre class="r"><code>## Convert values on Created.Date to POSIXlt object for using date elements
 noise$Created.Date &lt;- as.POSIXlt(noise$Created.Date, &quot;%m/%d/%Y&quot;, tz = &#39;EST&#39;)
@@ -475,7 +475,7 @@ calendarPlot(caldata, pollutant = &quot;count&quot;, year = 2016, main = &quot;N
 </div>
 <div id="conclusions" class="section level1">
 <h1>Conclusions</h1>
-<p>In this project, noise pollution in New York City is investigated based on three basic questions - Where, What and When. For Manhattan and Queens, noise pollution affects almost the whole area of these two boroughs. On the other hand, for Brookyn, Bronx, and Staten Island, noise pollution is located at some areas of these boroughs. Most attributable factors to noise pollution in New York City are coming from residential noise (about 53%). When we looked at calander heat map, noise pollution primarily occurs on weekend. Perhaps, it is because many people have a party and invite friends their house during the weekend.</p>
+<p>In this project, noise pollution in New York City is investigated based on three basic questions - Where, What and When. For Manhattan and Queens, noise pollution affects almost the whole area of these two boroughs. On the other hand, for Brookyn, Bronx, and Staten Island, noise pollutions are located at some areas of these boroughs. The most contributable factor to noise pollution in New York City is residential noise (about 53%). When we looked at calander heat map, noise pollution primarily occurs on weekend. Perhaps, it is because many people invite friends to their houses and have a party with playing music, making some noise. We’ve looked at some visualizations on noise pollution in New York City. It would be helpful to understand noise pollution in New York City.</p>
 <p>If possible, it would be interesting conduct the following research: - Examine noise pollution at hourly scale - Make interactive and dynamic noise pollution map - Examine spatial relationship noise pollution and heart disease</p>
 </div>
 <div id="references" class="section level1">
