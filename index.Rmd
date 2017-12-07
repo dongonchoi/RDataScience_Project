@@ -17,13 +17,13 @@ Noise pollution is the one of serious problems especially in metropolitan areas 
 
 NYC311 provides 24/7 support to New Yorkers by providing a one-stop shop for a multitude of general needs. Within the proximity of the New York Metropolitan Area, callers can dial 311 to request for a variety of governmental services, such as filing a noise complaint.
 
-The data set used in this project contains NYC311 Service Requests in 2016. Each observation contains 53 variables describing the service request, such as complaint type, date received, incident address, and resolution description. To reduce computational overhead, only five columns were used for this analysis. I will approach and analyze the data to answer the following three basic questions.
+The data set used in this project is NYC311 Service Requests data in 2016. Each observation contains 53 variables describing the service request, such as complaint type, date received, incident address, and resolution description. To reduce computational overhead, only several columns will be used. I will visualize and analyze the data to answer the following three basic questions:
 
 - **WHERE:** Where have gone through noise pollution?
 - **WHAT:** What could be contributable to noise pollution?
 - **WHEN:** When people in NYC have gone through noise pollution?
 
-To answer these questions, several tasks need to be done from a basic data handing to setting up for visualization. 
+To answer these questions, several tasks need to be done which include from a basic data handing to setting up for visualization. 
 
 ## Data preparation
 
@@ -43,7 +43,7 @@ library(DT)
 mapstyle = "element:geometry%7Ccolor:0x212121&style=element:labels.icon%7Cvisibility:off&style=element:labels.text.fill%7Ccolor:0x757575&style=element:labels.text.stroke%7Ccolor:0x212121&style=feature:administrative%7Celement:geometry%7Ccolor:0x757575&style=feature:administrative.country%7Celement:labels.text.fill%7Ccolor:0x9e9e9e&style=feature:administrative.land_parcel%7Cvisibility:off&style=feature:administrative.locality%7Celement:labels.text.fill%7Ccolor:0xbdbdbd&style=feature:administrative.neighborhood%7Cvisibility:off&style=feature:poi%7Celement:labels.text%7Cvisibility:off&style=feature:poi%7Celement:labels.text.fill%7Ccolor:0x757575&style=feature:poi.business%7Cvisibility:off&style=feature:poi.park%7Celement:geometry%7Ccolor:0x181818&style=feature:poi.park%7Celement:labels.text.fill%7Ccolor:0x616161&style=feature:poi.park%7Celement:labels.text.stroke%7Ccolor:0x1b1b1b&style=feature:road%7Celement:geometry.fill%7Ccolor:0x2c2c2c&style=feature:road%7Celement:labels%7Cvisibility:off&style=feature:road%7Celement:labels.icon%7Cvisibility:off&style=feature:road%7Celement:labels.text.fill%7Ccolor:0x8a8a8a&style=feature:road.arterial%7Celement:geometry%7Ccolor:0x373737&style=feature:road.highway%7Celement:geometry%7Ccolor:0x3c3c3c&style=feature:road.highway.controlled_access%7Celement:geometry%7Ccolor:0x4e4e4e&style=feature:road.local%7Celement:labels.text.fill%7Ccolor:0x616161&style=feature:transit%7Cvisibility:off&style=feature:transit%7Celement:labels.text.fill%7Ccolor:0x757575&style=feature:water%7Celement:geometry%7Ccolor:0x000000&style=feature:water%7Celement:labels.text%7Cvisibility:off&style=feature:water%7Celement:labels.text.fill%7Ccolor:0x3d3d3"
 ```
 
-The dataset used in this project is available at NYC Opean data website. We can download this data from [this link](https://nycopendata.socrata.com/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9). Due to the size of this dataset, I will load directly from my own computer after downloading the dataset.
+The dataset used in this project is available at NYC Opean data website. We can download this data from [this link](https://nycopendata.socrata.com/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9). Due to the size of this dataset, I will load directly from my own computer after downloading the dataset. After loading the dataset, we need to filter out some columns to reduce computational overhead.
 ```{r, Load Data and filter, message=F, warning=F}
 ## Load NYC 311 noise complaints data
 noise <- read.csv('data/NYC_noise_2016_1.csv', stringsAsFactors = F) %>%
@@ -53,7 +53,7 @@ noise <- filter(noise, !is.na(Latitude) | !is.na(Longitude)) %>%
   select(Created.Date, Complaint.Type, Borough, Latitude, Longitude)
 ```
 
-Let's look at data sample. After filtering, the data has five columns which contain noise information on date, type, region and location(lon, lat) respectively.
+Let's look at the data sample. After filtering, the data has five columns which contain noise information on date, type, region and location(lon, lat) respectively.
 ```{r, Show data sample, message=F, warning=F}
 ## Data Sample
 datatable(head(noise), options = list(searching = T, pageLength = 5))

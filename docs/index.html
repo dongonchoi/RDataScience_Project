@@ -318,13 +318,13 @@ div.tocify {
 <div id="data-source-nyc311-service-requests" class="section level2">
 <h2>Data source: NYC311 Service Requests</h2>
 <p>NYC311 provides 24/7 support to New Yorkers by providing a one-stop shop for a multitude of general needs. Within the proximity of the New York Metropolitan Area, callers can dial 311 to request for a variety of governmental services, such as filing a noise complaint.</p>
-<p>The data set used in this project contains NYC311 Service Requests in 2016. Each observation contains 53 variables describing the service request, such as complaint type, date received, incident address, and resolution description. To reduce computational overhead, only five columns were used for this analysis. I will approach and analyze the data to answer the following three basic questions.</p>
+<p>The data set used in this project is NYC311 Service Requests data in 2016. Each observation contains 53 variables describing the service request, such as complaint type, date received, incident address, and resolution description. To reduce computational overhead, only several columns will be used. I will visualize and analyze the data to answer the following three basic questions:</p>
 <ul>
 <li><strong>WHERE:</strong> Where have gone through noise pollution?</li>
 <li><strong>WHAT:</strong> What could be contributable to noise pollution?</li>
 <li><strong>WHEN:</strong> When people in NYC have gone through noise pollution?</li>
 </ul>
-<p>To answer these questions, several tasks need to be done from a basic data handing to setting up for visualization.</p>
+<p>To answer these questions, several tasks need to be done which include from a basic data handing to setting up for visualization.</p>
 </div>
 <div id="data-preparation" class="section level2">
 <h2>Data preparation</h2>
@@ -338,18 +338,18 @@ library(openair)
 library(scales)
 library(gridExtra)
 library(DT)</code></pre>
-<p>The dataset used in this project is available at NYC Opean data website. We can download this data from <a href="https://nycopendata.socrata.com/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9">this link</a>. Due to the size of this dataset, I will load directly from my own computer after downloading the dataset.</p>
+<p>The dataset used in this project is available at NYC Opean data website. We can download this data from <a href="https://nycopendata.socrata.com/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9">this link</a>. Due to the size of this dataset, I will load directly from my own computer after downloading the dataset. After loading the dataset, we need to filter out some columns to reduce computational overhead.</p>
 <pre class="r"><code>## Load NYC 311 noise complaints data
 noise &lt;- read.csv(&#39;data/NYC_noise_2016_1.csv&#39;, stringsAsFactors = F) %&gt;%
   tbl_df()
 ## Filter NYC 311 dataRemove missing data
 noise &lt;- filter(noise, !is.na(Latitude) | !is.na(Longitude)) %&gt;%
   select(Created.Date, Complaint.Type, Borough, Latitude, Longitude)</code></pre>
-<p>Let’s look at data sample. After filtering, the data has five columns which contain noise information on date, type, region and location(lon, lat) respectively.</p>
+<p>Let’s look at the data sample. After filtering, the data has five columns which contain noise information on date, type, region and location(lon, lat) respectively.</p>
 <pre class="r"><code>## Data Sample
 datatable(head(noise), options = list(searching = T, pageLength = 5))</code></pre>
-<div id="htmlwidget-e50f1e1630b1c720ae0a" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-e50f1e1630b1c720ae0a">{"x":{"filter":"none","data":[["1","2","3","4","5","6"],["1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016"],["Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified"],["MANHATTAN","QUEENS","QUEENS","STATEN ISLAND","MANHATTAN","BROOKLYN"],[40.77449446,40.7448441,40.68950349,40.60606495,40.76389296,40.6982486],[-73.94974925,-73.87034735,-73.86036568,-74.06557749,-73.96047147,-73.92996453]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Created.Date<\/th>\n      <th>Complaint.Type<\/th>\n      <th>Borough<\/th>\n      <th>Latitude<\/th>\n      <th>Longitude<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"searching":true,"pageLength":5,"columnDefs":[{"className":"dt-right","targets":[4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-36b304a424198398b61a" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-36b304a424198398b61a">{"x":{"filter":"none","data":[["1","2","3","4","5","6"],["1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016"],["Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified"],["MANHATTAN","QUEENS","QUEENS","STATEN ISLAND","MANHATTAN","BROOKLYN"],[40.77449446,40.7448441,40.68950349,40.60606495,40.76389296,40.6982486],[-73.94974925,-73.87034735,-73.86036568,-74.06557749,-73.96047147,-73.92996453]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Created.Date<\/th>\n      <th>Complaint.Type<\/th>\n      <th>Borough<\/th>\n      <th>Latitude<\/th>\n      <th>Longitude<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"searching":true,"pageLength":5,"columnDefs":[{"className":"dt-right","targets":[4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
 <p>We need to convert date format to ’POSIXlt’to handle date information properly. Also location values(Latitude and Longitude) need to be rounded to 3 decimals to conduct density calculation based on location.</p>
 <pre class="r"><code>## Convert values on Created.Date to POSIXlt object for using date elements
 noise$Created.Date &lt;- as.POSIXlt(noise$Created.Date, &quot;%m/%d/%Y&quot;, tz = &#39;EST&#39;)
