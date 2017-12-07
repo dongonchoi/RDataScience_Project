@@ -9,7 +9,7 @@ author: "By Choi Dongon"
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Ru%C3%ADdo_Noise_041113GFDL.JPG/800px-Ru%C3%ADdo_Noise_041113GFDL.JPG" alt="alt text" width="800">
 <small>*source - https://commons.wikimedia.org. Lisence of this image is free to noncommercial reuse.*</small>
 
-Noise pollution is the one of serious problems especially in metropolitan areas such as New York City. Noise has a negative impact on dwellers' health or well-being lives, and also the growing body of scientific evidence is showing direct health effect (Dominici, 2013, and WHO, 2011). Thus, noise needs to be considered the one of serious problems we have been going through. In this project, I will investigate noise pollution problems in New York City by visualizing and analyzing NYC Open Data's dataset on 311 Service Requests to have a better understanding on this problems.
+Noise pollution is the one of serious problems especially in metropolitan areas such as New York City. Noise has a negative impact on dwellers' health or well-being lives, and also the growing body of scientific evidence is showing direct health effect (Dominici, 2013, and WHO, 2011). Thus, noise needs to be considered the one of serious problems we have been going through. In this project, I will investigate noise pollution problems in New York City by visualizing and analyzing NYC Open Data's dataset on 311 Service Requests.
 
 # Materials and methods
 
@@ -53,7 +53,7 @@ noise <- filter(noise, !is.na(Latitude) | !is.na(Longitude)) %>%
   select(Created.Date, Complaint.Type, Borough, Latitude, Longitude)
 ```
 
-Let's look at data sample.
+Let's look at data sample. After filtering, the data has five columns which contain noise information on date, type, region and location(lon, lat) respectively.
 ```{r, Show data sample, message=F, warning=F}
 ## Data Sample
 datatable(head(noise), options = list(searching = T, pageLength = 5))
@@ -109,7 +109,7 @@ instat <- group_by(select(noise, -Created.Date), Borough, year) %>%
   group_by(year)
 ```
 
-Noise pollution is visualized by using 'stat_density2d' function provided from ggplot2 package. This 'stat_density2d' function is to do 2D kernel density estimation. Each created ggmap for noise pollution by borough is stored in order to display properly in Result section. 
+Noise pollution is visualized with 'stat_density2d' function provided from ggplot2 package. This 'stat_density2d' function is to do 2D kernel density estimation. Each created ggmap for noise pollution by borough is stored in order to display properly in Result section. 
 ```{r, Set up ggmap, message=F, warning=F}
 ## Set up ggmap to map distribution of noise by borough
 mp1 <- ggmap(manhMap) +
@@ -148,7 +148,7 @@ bynoisetype <- group_by(select(noise, -Created.Date), Complaint.Type, year) %>%
   mutate(percent = count / sum(count)*100)
 ```
 
-To create calander heat map, we need to load raw dataset and modify data.
+To create a calander heat map, we need to load raw dataset and modify data.
 ```{r, Set tup data for date analysis, message=F, warning=F}
 ## Set up data for date analysis
 ## Load raw dataset for date analysis
@@ -166,7 +166,7 @@ caldata$date <- as.POSIXct(caldata$date, "%m/%d/%Y", tz = "EST")
 
 # Results
 ## WHERE: Noise pollution by Borough
-The following maps are showing where noise pollution occurs and a spatial pattern of noise pollution within each borough.
+The following maps show the spatial distribution of noise pollution by each borough. New York City has five boroughs, which are Manhattan, Brooklyn, Queens, Bronx, and Staten Island.
 
 ```{r, Map noise pollution, warning=F, message=F, eval=F, results='hide'}
 ## Map noise pollution by borough
@@ -179,7 +179,7 @@ grid.arrange(mp5, ncol = 2)
 ```
 
 ## WHAT: Noise pollution by Type
-Below plot is illustrating distribution of noise pollution by type. We can find the source of noise pollution in New York City.
+Below plot illustrates the distribution of noise pollution by type. We can find the source of noise pollution in New York City.
 
 ```{r, Plot noise type, warning=F, message=F, fig.width= 9}
 ## Plot distribution of noise pollution by type
@@ -194,7 +194,7 @@ ggplot(bynoisetype, aes(x=reorder(Complaint.Type, count), y=count, fill=Complain
 ```
 
 ## WHEN: Noise pollution by Date
-The following calender map illustrates noise pollution by day in 2016. It is easy to make a calendar map with 'calenderPlot' function.
+The following calender map illustrates noise pollution by each day in 2016. It is easy to make a calendar map with 'calenderPlot' function.
 
 ```{r, Calander heat map, message=F, warning=F, fig.width= 9}
 ## Plot a calendar heat map on Noise pollution by date
