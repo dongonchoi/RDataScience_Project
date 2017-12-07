@@ -9,13 +9,13 @@ author: "By Choi Dongon"
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Ru%C3%ADdo_Noise_041113GFDL.JPG/800px-Ru%C3%ADdo_Noise_041113GFDL.JPG" alt="alt text" width="800">
 <small>*source - https://commons.wikimedia.org. Lisence of this image is free to noncommercial reuse.*</small>
 
-Noise pollution is the one of serious problems especially in metropolitan areas such as New York City. Noise has a negative impact on dwellers' health or well-being lives, and also the growing body of scientific evidence is showing direct health effect (Dominici, 2013, and WHO, 2011). Thus, noise needs to be considered the one of serious problems we have been going through. In this project, I will investigate noise pollution problems in New York City by visualizing and analyzing NYC Open Data's dataset on 311 Service Requests.
+Noise pollution is the one of serious problems especially in metropolitan areas such as New York City. Noise has a negative impact on dwellers' health or well-being lives. Also the growing body of scientific evidence shows noise pollution has a direct health effect (Dominici, 2013, and WHO, 2011). Thus, noise needs to be considered the one of serious problems we have been going through. In this project, I will investigate noise pollution problems in New York City by visualizing and analyzing NYC311 Service Request data.
 
 # Materials and methods
 
 ## Data source: NYC311 Service Requests
 
-NYC311 provides 24/7 support to New Yorkers by providing a one-stop shop for a multitude of general needs. Within the proximity of the New York Metropolitan Area, callers can dial 311 to request for a variety of governmental services, such as filing a noise complaint.
+NYC311 provides 24/7 support to people in New York City by providing a service, which is collecting requests for a variety of governmental services, such as filing a noise complaint.
 
 The data set used in this project is NYC311 Service Requests data in 2016. Each observation contains 53 variables describing the service request, such as complaint type, date received, incident address, and resolution description. To reduce computational overhead, only several columns will be used. I will visualize and analyze the data to answer the following three basic questions:
 
@@ -203,7 +203,7 @@ calendarPlot(caldata, pollutant = "count", year = 2016, main = "Noise pollution 
 
 # Conclusions
 
-In this project, noise pollution in New York City is investigated based on three basic questions - Where, What and When. For Manhattan and Queens, noise pollution affects almost the whole area of these two boroughs. On the other hand, for Brookyn, Bronx, and Staten Island, noise pollutions are located at some areas of these boroughs. The most contributable factor to noise pollution in New York City is residential noise (about 53%). When we looked at calander heat map, noise pollution primarily occurs on weekend. Perhaps, it is because many people invite friends to their houses and have a party with playing music, making some noise. We've looked at some visualizations on noise pollution in New York City. It would be helpful to understand noise pollution in New York City.
+In this project, noise pollution in New York City is investigated based on three basic questions - Where, What and When. For Manhattan and Queens, noise pollution is distributed almost the whole of each borough. On the other hand, for Brookyn and Staten Island, noise pollution is distributed in northern areas of those boroughs. For Bronx, noise pollution is distributed in southern area. The most contributable factor to noise pollution in New York City is residential noise (about 53%). When we looked at calander heat map, noise pollution primarily occurs during the weekend. It might be because many people invite friends to their houses and have a party with playing a music, making some serious noise. We've looked at several visualizations on noise pollution in New York City. It would be helpful to understand noise pollution in New York City.
 
 If possible, it would be interesting conduct the following research:
 - Examine noise pollution at hourly scale
