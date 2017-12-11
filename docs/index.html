@@ -311,20 +311,20 @@ div.tocify {
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
 <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Ru%C3%ADdo_Noise_041113GFDL.JPG/800px-Ru%C3%ADdo_Noise_041113GFDL.JPG" alt="alt text" width="800"> <small><em>source - <a href="https://commons.wikimedia.org" class="uri">https://commons.wikimedia.org</a>. Lisence of this image is free to noncommercial reuse.</em></small></p>
-<p>Noise pollution is the one of serious problems especially in metropolitan areas such as New York City. Noise has a negative impact on dwellers’ health or well-being lives. Also the growing body of scientific evidence shows noise pollution has a direct health effect (Dominici, 2013, and WHO, 2011). Thus, noise needs to be considered the one of serious problems we have been going through. In this project, we will investigate noise pollution problems in New York City by visualizing and analyzing NYC311 Service Request data.</p>
+<p>Noise pollution is the one of serious problems especially in metropolitan areas such as New York City. Noise has a negative impact on dwellers’ well-being lives. Also much scientific evidence shows that noise pollution has a direct health effect (Dominici, 2013, and WHO, 2011). Thus, noise needs to be considered the one of serious problems we have been going through. In this project, we will investigate noise pollution problems in New York City by visualizing and analyzing NYC311 Service Request data.</p>
 </div>
 <div id="materials-and-methods" class="section level1">
 <h1>Materials and methods</h1>
 <div id="data-source-nyc311-service-requests" class="section level2">
 <h2>Data source: NYC311 Service Requests</h2>
-<p>NYC311 provides 24/7 support to people in New York City by providing a service, which is collecting requests for a variety of governmental services, such as filing a noise complaint.</p>
-<p>The data used in this project is NYC311 Service Requests data in 2016. Each observation contains 53 variables describing the service request, such as complaint type, date received, incident address, and resolution description. To reduce computational overhead, only several columns will be used. I will visualize and analyze the data to answer the following three basic questions:</p>
+<p>NYC311 Service Requests provides support to people in New York City by providing a service at any time, all year round, which is collecting requests for a variety of governmental services, such as filing a noise complaint.</p>
+<p>The data used in this project is NYC311 Service Requests data in 2016. Each observation contains 53 variables describing the detailed information on each the service request, such as complaint type, date received, incident location, and description of complaint. In order to lessen computational overhead, in this project, only several columns will be used. I will visualize and analyze the data to answer the following three basic questions on noise pollution in New York City in 2016:</p>
 <ul>
 <li><strong>WHERE:</strong> Where does noise pollution occur?</li>
 <li><strong>WHAT:</strong> What are contributable factors?</li>
 <li><strong>WHEN:</strong> When does noise pollution take place?</li>
 </ul>
-<p>To answer these questions, several tasks need to be done which include from a basic data handing to setting up for visualization.</p>
+<p>To answer these questions, several tasks need to be done. It includes from a basic data handing to setting up for visualization.</p>
 </div>
 <div id="data-preparation" class="section level2">
 <h2>Data preparation</h2>
@@ -348,8 +348,8 @@ noise &lt;- filter(noise, !is.na(Latitude) | !is.na(Longitude)) %&gt;%
 <p>Let’s look at the data sample. After filtering, the data has five columns which contain noise information on incident date, type of complaint, region and location(lon, lat) where it took place respectively.</p>
 <pre class="r"><code>## Data Sample
 datatable(head(noise), options = list(searching = T, pageLength = 5))</code></pre>
-<div id="htmlwidget-0b67ab6ff1a0086be5c5" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-0b67ab6ff1a0086be5c5">{"x":{"filter":"none","data":[["1","2","3","4","5","6"],["1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016"],["Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified"],["MANHATTAN","QUEENS","QUEENS","STATEN ISLAND","MANHATTAN","BROOKLYN"],[40.77449446,40.7448441,40.68950349,40.60606495,40.76389296,40.6982486],[-73.94974925,-73.87034735,-73.86036568,-74.06557749,-73.96047147,-73.92996453]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Created.Date<\/th>\n      <th>Complaint.Type<\/th>\n      <th>Borough<\/th>\n      <th>Latitude<\/th>\n      <th>Longitude<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"searching":true,"pageLength":5,"columnDefs":[{"className":"dt-right","targets":[4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-3003be8c8672c930904e" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3003be8c8672c930904e">{"x":{"filter":"none","data":[["1","2","3","4","5","6"],["1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016","1/1/2016"],["Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified","Noise - Unspecified"],["MANHATTAN","QUEENS","QUEENS","STATEN ISLAND","MANHATTAN","BROOKLYN"],[40.77449446,40.7448441,40.68950349,40.60606495,40.76389296,40.6982486],[-73.94974925,-73.87034735,-73.86036568,-74.06557749,-73.96047147,-73.92996453]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Created.Date<\/th>\n      <th>Complaint.Type<\/th>\n      <th>Borough<\/th>\n      <th>Latitude<\/th>\n      <th>Longitude<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"searching":true,"pageLength":5,"columnDefs":[{"className":"dt-right","targets":[4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
 <p>We need to convert date format of Created.Date to ’POSIXlt’to handle date information properly. Also the values on location(both Latitude and Longitude) need to be rounded to 3 decimals to conduct a density calculation.</p>
 <pre class="r"><code>## Convert values on Created.Date to POSIXlt object for using date elements
 noise$Created.Date &lt;- as.POSIXlt(noise$Created.Date, &quot;%m/%d/%Y&quot;, tz = &#39;EST&#39;)

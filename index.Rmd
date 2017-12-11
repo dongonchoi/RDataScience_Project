@@ -9,21 +9,21 @@ author: "By Choi Dongon"
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Ru%C3%ADdo_Noise_041113GFDL.JPG/800px-Ru%C3%ADdo_Noise_041113GFDL.JPG" alt="alt text" width="800">
 <small>*source - https://commons.wikimedia.org. Lisence of this image is free to noncommercial reuse.*</small>
 
-Noise pollution is the one of serious problems especially in metropolitan areas such as New York City. Noise has a negative impact on dwellers' health or well-being lives. Also the growing body of scientific evidence shows noise pollution has a direct health effect (Dominici, 2013, and WHO, 2011). Thus, noise needs to be considered the one of serious problems we have been going through. In this project, we will investigate noise pollution problems in New York City by visualizing and analyzing NYC311 Service Request data.
+Noise pollution is the one of serious problems especially in metropolitan areas such as New York City. Noise has a negative impact on dwellers' well-being lives. Also much scientific evidence shows that noise pollution has a direct health effect (Dominici, 2013, and WHO, 2011). Thus, noise needs to be considered the one of serious problems we have been going through. In this project, we will investigate noise pollution problems in New York City by visualizing and analyzing NYC311 Service Request data.
 
 # Materials and methods
 
 ## Data source: NYC311 Service Requests
 
-NYC311 provides 24/7 support to people in New York City by providing a service, which is collecting requests for a variety of governmental services, such as filing a noise complaint.
+NYC311 Service Requests provides support to people in New York City by providing a service at any time, all year round, which is collecting requests for a variety of governmental services, such as filing a noise complaint.
 
-The data used in this project is NYC311 Service Requests data in 2016. Each observation contains 53 variables describing the service request, such as complaint type, date received, incident address, and resolution description. To reduce computational overhead, only several columns will be used. I will visualize and analyze the data to answer the following three basic questions:
+The data used in this project is NYC311 Service Requests data in 2016. Each observation contains 53 variables describing the detailed information on each the service request, such as complaint type, date received, incident location, and description of complaint. In order to lessen computational overhead, in this project, only several columns will be used. I will visualize and analyze the data to answer the following three basic questions on noise pollution in New York City in 2016:
 
 - **WHERE:** Where does noise pollution occur?
 - **WHAT:** What are contributable factors?
 - **WHEN:** When does noise pollution take place?
 
-To answer these questions, several tasks need to be done which include from a basic data handing to setting up for visualization. 
+To answer these questions, several tasks need to be done. It includes from a basic data handing to setting up for visualization.
 
 ## Data preparation
 
